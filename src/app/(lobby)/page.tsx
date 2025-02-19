@@ -68,8 +68,8 @@ export default function Home() {
           <Button size="lg" asChild>
             <Link href="/create-thread">Start a Discussion</Link>
           </Button>
-          <Button size="lg" variant="outline">
-            Explore Topics
+          <Button size="lg" variant="outline" asChild>
+            <Link href={"/topics"}>Explore Topics</Link>
           </Button>
         </div>
       </section>

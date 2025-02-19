@@ -98,7 +98,7 @@ export default function TextEditor({
           "border rounded-md overflow-hidden max-h-[20rem] pb-6 custom-vertical-scroll"
         )}
       >
-        <div className="bg-muted p-2 flex flex-wrap gap-2 sticky top-0 z-10">
+        <div className="bg-muted p-2 flex flex-wrap gap-2">
           <Button
             type="button"
             variant="ghost"
@@ -233,7 +233,7 @@ export default function TextEditor({
         </div>
       </div>
       <div>
-        <p className="text-sm mt-3">
+        <p className="text-xs mt-3">
           {editor.storage.characterCount.characters()} / {limitContent}{" "}
           characters
         </p>

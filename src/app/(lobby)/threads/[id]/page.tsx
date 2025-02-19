@@ -2,6 +2,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
+import DOMPurify from "isomorphic-dompurify";
 
 // Dummy data for a thread and its comments
 const thread = {
@@ -37,6 +38,8 @@ const comments = [
 //   searchParams: { [key: string]: string | string[] | undefined };
 // }
 
+const html = `<p onclick="alert('helo')">I'm new to programming and wondering which language I should start with. Any suggestions? hola</p>`;
+
 export default function ThreadPage() {
   return (
     <div className="space-y-6">
@@ -54,7 +57,7 @@ export default function ThreadPage() {
           </div>
         </CardHeader>
         <CardContent>
-          <p>{thread.content}</p>
+          <div dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(html) }} />
         </CardContent>
       </Card>
 
