@@ -1,8 +1,7 @@
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Textarea } from "@/components/ui/textarea";
 import DOMPurify from "isomorphic-dompurify";
+import FormComment from "../_components/form-comment";
 
 // Dummy data for a thread and its comments
 const thread = {
@@ -87,11 +86,7 @@ export default function ThreadPage() {
         ))}
       </div>
 
-      <div className="mt-8">
-        <h3 className="text-xl font-bold mb-4">Add a comment</h3>
-        <Textarea placeholder="Type your comment here." className="mb-4" />
-        <Button>Post Comment</Button>
-      </div>
+      <FormComment />
     </div>
   );
 }

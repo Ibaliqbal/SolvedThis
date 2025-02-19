@@ -59,7 +59,7 @@ export default function TopicsPage() {
       <h1 className="text-3xl font-bold">Topics</h1>
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
         {topics.map((topic) => (
-          <Link key={topic.slug} href={`/category/${topic.slug}`}>
+          <Link key={topic.slug} href={`/topics/${topic.slug}`}>
             <Card className="hover:bg-muted/50 transition-colors">
               <CardHeader>
                 <CardTitle>{topic.name}</CardTitle>

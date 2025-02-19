@@ -1,3 +1,5 @@
+"use client";
+
 import React from "react";
 import Link from "next/link";
 import { ThemeToggle } from "./theme-toggle";
@@ -11,17 +13,26 @@ import {
 } from "@/components/ui/navigation-menu";
 import { cn } from "@/lib/utils";
 import { topics } from "@/config/topics";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, HandHeart } from "lucide-react";
+import { Session } from "@/auth";
+import { Button } from "./ui/button";
+import SearchPopup from "./search-popup";
+import ProfileDropdown from "./profile-dropdown";
 
-export default function Header() {
+type Props = {
+  session: Session | null;
+};
+
+export default function Header({ session }: Props) {
   return (
     <header className="border-b sticky top-0 z-10 bg-background">
       <div className="container mx-auto px-4 py-4 flex justify-between items-center">
         <div className="flex items-center gap-3">
-          <Link href="/" className="text-2xl font-bold">
+          <Link href="/" className="text-2xl font-bold flex items-center gap-2">
+            <HandHeart />
             SolvedThis
           </Link>
-          <NavigationMenu>
+          <NavigationMenu className="hidden md:block">
             <NavigationMenuList>
               <NavigationMenuItem>
                 <NavigationMenuTrigger>Home</NavigationMenuTrigger>
@@ -33,12 +44,13 @@ export default function Header() {
                           className="flex h-full w-full select-none flex-col justify-end rounded-md bg-gradient-to-b from-muted/50 to-muted p-6 no-underline outline-none focus:shadow-md"
                           href="/"
                         >
-                          <div className="mb-2 mt-4 text-lg font-medium">
+                          <HandHeart className="w-8 h-8" />
+                          <div className="my-2 text-lg font-medium">
                             SolvedThis
                           </div>
                           <p className="text-sm leading-tight text-muted-foreground">
-                            An open-source discussion platform for sharing
-                            ideas and asking questions.
+                            An open-source discussion platform built with
+                            Next.js
                           </p>
                         </Link>
                       </NavigationMenuLink>
@@ -51,28 +63,6 @@ export default function Header() {
                       How to install dependencies and structure your app.
                     </ListItem>
                     <ListItem
-                      href="/docs/primitives/typography"
-                      title="Typography"
-                    >
-                      Styles for headings, paragraphs, lists...etc
-                    </ListItem>
-                  </ul>
-                </NavigationMenuContent>
-              </NavigationMenuItem>
-              <NavigationMenuItem>
-                <NavigationMenuTrigger>Topics</NavigationMenuTrigger>
-                <NavigationMenuContent>
-                  <ul className="grid w-[400px] gap-3 p-4 md:w-[500px] md:grid-cols-2 lg:w-[600px]">
-                    {topics.slice(0, 5).map((category) => (
-                      <ListItem
-                        key={category.name}
-                        title={category.name}
-                        href={`/topics/${category.name.toLowerCase()}`}
-                      >
-                        {category.description}
-                      </ListItem>
-                    ))}
-                    <ListItem
                       title={"Explore more"}
                       href={`/topics`}
                       className="group"
@@ -83,10 +73,30 @@ export default function Header() {
                   </ul>
                 </NavigationMenuContent>
               </NavigationMenuItem>
+              <NavigationMenuItem>
+                <NavigationMenuTrigger>Topics</NavigationMenuTrigger>
+                <NavigationMenuContent>
+                  <ul className="grid w-[400px] gap-3 p-4 md:w-[500px] md:grid-cols-2 lg:w-[600px]">
+                    {topics.slice(0, 6).map((category) => (
+                      <ListItem
+                        key={category.name}
+                        title={category.name}
+                        href={`/topics/${category.name.toLowerCase()}`}
+                      >
+                        {category.description}
+                      </ListItem>
+                    ))}
+                  </ul>
+                </NavigationMenuContent>
+              </NavigationMenuItem>
             </NavigationMenuList>
           </NavigationMenu>
         </div>
-        <ThemeToggle />
+        <div className="flex items-center gap-2">
+          <SearchPopup />
+          <ThemeToggle />
+          {session ? <Button>Logout</Button> : <ProfileDropdown />}
+        </div>
       </div>
     </header>
   );

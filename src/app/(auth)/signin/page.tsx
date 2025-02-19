@@ -1,4 +1,3 @@
-import { Button } from "@/components/ui/button";
 import {
   CardContent,
   CardDescription,
@@ -6,10 +5,10 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
 import { Metadata } from "next";
 import Link from "next/link";
 import React from "react";
+import FormSignin from "../_components/form-signin";
 
 export const metadata: Metadata = {
   title: "Signin - SolvedThis",
@@ -25,29 +24,7 @@ const Page = () => {
         <CardDescription>Sign in to your account to continue</CardDescription>
       </CardHeader>
       <CardContent>
-        <form>
-          <div className="space-y-4">
-            <div className="space-y-2">
-              <label
-                htmlFor="email"
-                className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-              >
-                Email
-              </label>
-              <Input id="email" type="email" placeholder="m@example.com" />
-            </div>
-            <div className="space-y-2">
-              <label
-                htmlFor="password"
-                className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-              >
-                Password
-              </label>
-              <Input id="password" type="password" />
-            </div>
-            <Button className="w-full">Sign In</Button>
-          </div>
-        </form>
+        <FormSignin />
       </CardContent>
       <CardFooter>
         <p className="text-sm text-center text-gray-600 dark:text-gray-400  w-full">

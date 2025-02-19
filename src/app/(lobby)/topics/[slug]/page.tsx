@@ -43,7 +43,7 @@ export default function CategoryPage({ params }: { params: { slug: string } }) {
           <Link key={thread.id} href={`/threads/${thread.id}`}>
             <Card className="hover:bg-muted/50 transition-colors animate-fade-up">
               <CardHeader>
-                <div className="flex items-center justify-between">
+                <div className="flex md:items-center justify-between md:flex-row flex-col gap-2">
                   <CardTitle>{thread.title}</CardTitle>
                   <div className="flex items-center space-x-2 text-sm text-muted-foreground">
                     <span>{thread.replies} replies</span>

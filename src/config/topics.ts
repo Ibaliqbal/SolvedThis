@@ -38,7 +38,6 @@ const topics = [
   {
     name: "Photography",
     description: "Share photos and photography techniques",
-    icon: "Camera",
   },
   {
     name: "Art & Design",
@@ -63,7 +62,6 @@ const topics = [
   {
     name: "DIY & Crafts",
     description: "Share handmade projects and craft ideas",
-    icon: "Tool",
   },
   {
     name: "Pets & Animals",

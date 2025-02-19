@@ -4,7 +4,7 @@ import { ReactNode } from "react";
 
 const Layout = ({ children }: { children: ReactNode }) => {
   return (
-    <main className="min-h-screen container flex items-center justify-center">
+    <main className="min-h-screen flex items-center justify-center">
       <Card className="w-full max-w-4xl overflow-hidden">
         <div className="flex flex-col md:flex-row">
           <section className="relative hidden md:block md:w-1/2">
