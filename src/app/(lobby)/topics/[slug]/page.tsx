@@ -33,11 +33,10 @@ const threads = [
 ];
 
 export default function CategoryPage({ params }: { params: { slug: string } }) {
+  const slug = decodeURIComponent(params.slug);
   return (
     <div className="space-y-6">
-      <h1 className="text-3xl font-bold capitalize">
-        {params.slug} Discussions
-      </h1>
+      <h1 className="text-3xl font-bold capitalize">{slug} Discussions</h1>
       <div className="flex flex-col gap-4">
         {threads.map((thread) => (
           <Link key={thread.id} href={`/threads/${thread.id}`}>

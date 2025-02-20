@@ -1,55 +1,39 @@
 import { drizzle } from "drizzle-orm/postgres-js";
-import { type PostgresJsDatabase } from "drizzle-orm/postgres-js";
 import postgres from "postgres";
 import * as schema from "./schema";
 
-const createConnection = (connection_string: string) => {
-  return postgres(connection_string, {
-    max: 20,
-    idle_timeout: 30,
-    max_lifetime: 60 * 30,
-  });
-};
+// import { type PostgresJsDatabase } from "drizzle-orm/postgres-js";
 
-// Fix for "sorry, too many clients already" from:
-// https://www.answeroverflow.com/m/1146224610002600067
+const client = postgres(process.env.DATABASE_CONNECTION_STRING!);
+export const db = drizzle(client, { schema });
 
-declare global {
-  // eslint-disable-next-line no-var -- only var works here
-  var db: PostgresJsDatabase<typeof schema> | undefined;
-}
+// // Declare global to prevent multiple instances during hot reloading in development
+// declare global {
+//   // eslint-disable-next-line no-var
+//   var db: PostgresJsDatabase<typeof schema> | undefined;
+// }
 
-let db: PostgresJsDatabase<typeof schema>;
+// const connectionPool = postgres(process.env.DATABASE_CONNECTION_STRING!, {
+//   max: 20, // Reduced to a more reasonable number
+//   idle_timeout: 30,
+//   max_lifetime: 60 * 30, // 30 minutes
+// });
 
-if (process.env.NODE_ENV === "production") {
-  const client = createConnection(
-    process.env.DATABASE_CONNECTION_STRING as string
-  );
+// function createDb() {
+//   return drizzle(connectionPool, { schema });
+// }
 
-  db = drizzle(client, {
-    schema,
-  });
-} else {
-  if (!global.db) {
-    const client = createConnection(
-      process.env.DATABASE_CONNECTION_STRING as string
-    );
+// let db: PostgresJsDatabase<typeof schema>;
 
-    global.db = drizzle(client, {
-      schema,
-      logger: {
-        logQuery: (query) => {
-          // to remove quotes on query string, to make it more readable
-          console.log({ query: query.replace(/\"/g, "") });
-        },
-      },
-    });
-  }
+// if (process.env.NODE_ENV === "production") {
+//   db = createDb();
+// } else {
+//   if (!global.db) {
+//     global.db = createDb();
+//   }
+//   db = global.db;
+// }
 
-  db = global.db;
-}
-
-type DbInstance = typeof db;
-
-export { db };
-export type { DbInstance };
+// export { db };
+// type DbInstance = typeof db;
+// export type { DbInstance };

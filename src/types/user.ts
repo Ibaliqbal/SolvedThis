@@ -26,3 +26,9 @@ export const signinSchema = z.object({
 export type SigninSchemaT = z.infer<typeof signinSchema>;
 
 export type SignupSchemaT = z.infer<typeof signupSchema>;
+
+export type LevelData = {
+  level: number;
+  pointsNeeded: number;
+  pointsUp: number; // poin yang bisa didapat di level ini
+};

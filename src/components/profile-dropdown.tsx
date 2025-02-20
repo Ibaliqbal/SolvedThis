@@ -1,3 +1,5 @@
+"use client";
+
 import { LogOut, User } from "lucide-react";
 import {
   DropdownMenu,
@@ -10,12 +12,15 @@ import {
 } from "./ui/dropdown-menu";
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 import Link from "next/link";
+import { authClient } from "@/lib/auth-client";
+import { useRouter } from "next/navigation";
 
 const ProfileDropdown = () => {
+  const router = useRouter();
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Avatar className="h-7  w-7">
+        <Avatar className="h-7 w-7">
           <AvatarImage src={`https://avatar.vercel.sh/johndoe`} />
           <AvatarFallback>J</AvatarFallback>
         </Avatar>
@@ -30,7 +35,12 @@ const ProfileDropdown = () => {
               Profile
             </Link>
           </DropdownMenuItem>
-          <DropdownMenuItem>
+          <DropdownMenuItem
+            onClick={async () => {
+              await authClient.signOut();
+              router.refresh();
+            }}
+          >
             <LogOut />
             Logout
           </DropdownMenuItem>

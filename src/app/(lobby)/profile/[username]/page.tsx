@@ -38,6 +38,7 @@ export default function UserProfilePage({
 }: {
   params: { username: string };
 }) {
+  const username = decodeURIComponent(params.username);
   return (
     <div className="space-y-6">
       <Card>

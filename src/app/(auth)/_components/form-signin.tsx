@@ -12,8 +12,13 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
+import { authClient } from "@/lib/auth-client";
+import toast from "react-hot-toast";
+import { useRouter } from "next/navigation";
+import { Loader2 } from "lucide-react";
 
 const FormSignin = () => {
+  const router = useRouter();
   const form = useForm<SigninSchemaT>({
     resolver: zodResolver(signinSchema),
     defaultValues: {
@@ -22,8 +27,27 @@ const FormSignin = () => {
     },
   });
 
-  function handleSubmit(data: SigninSchemaT) {
-    console.log(data);
+  async function handleSubmit(data: SigninSchemaT) {
+    await authClient.signIn.email(
+      {
+        email: data.email,
+        password: data.password,
+        callbackURL: "/",
+      },
+      {
+        onRequest: () => {
+          toast.loading("Signing in...");
+        },
+        onSuccess: () => {
+          form.reset()
+          router.refresh();
+        },
+        onError: (ctx) => {
+          toast.error(ctx.error.message);
+          form.reset();
+        },
+      }
+    );
   }
 
   return (
@@ -57,6 +81,7 @@ const FormSignin = () => {
                 <Input
                   {...field}
                   className="text-base md:py-5 py-3 focus:outline-none"
+                  type="password"
                   placeholder="*********"
                 />
               </FormControl>
@@ -64,7 +89,10 @@ const FormSignin = () => {
             </FormItem>
           )}
         />
-        <Button className="w-full">Sign In</Button>
+        <Button className="w-full" disabled={form.formState.isSubmitting}>
+          {form.formState.isSubmitting && <Loader2 className="animate-spin" />}
+          Sign In
+        </Button>
       </form>
     </Form>
   );

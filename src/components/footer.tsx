@@ -1,5 +1,6 @@
 import Link from "next/link";
-import { Facebook, Twitter, Instagram, Github } from "lucide-react";
+import { Instagram, Github } from "lucide-react";
+import { ThemeToggle } from "./theme-toggle";
 
 export default function Footer() {
   return (
@@ -8,11 +9,12 @@ export default function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
           <div>
             <h3 className="text-lg font-semibold mb-4">About SolvedThis</h3>
-            <p className="text-sm text-muted-foreground">
+            <p className="text-sm text-muted-foreground mb-3">
               SolvedThis is a vibrant community where ideas flourish and
               conversations thrive. Join us in shaping the future of online
               discussions.
             </p>
+            <ThemeToggle align="start" />
           </div>
           <div>
             <h3 className="text-lg font-semibold mb-4">Quick Links</h3>
@@ -96,7 +98,7 @@ export default function Footer() {
         </div>
         <div className="mt-8 pt-4 border-t border-gray-200 dark:border-gray-800">
           <p className="text-center text-sm text-muted-foreground">
-            © 2025 SolvedThis. All rights reserved.
+            &copy; 2025 SolvedThis. All rights reserved.
           </p>
         </div>
       </div>

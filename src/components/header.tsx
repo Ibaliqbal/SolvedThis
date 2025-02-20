@@ -2,7 +2,6 @@
 
 import React from "react";
 import Link from "next/link";
-import { ThemeToggle } from "./theme-toggle";
 import {
   NavigationMenu,
   NavigationMenuContent,
@@ -55,19 +54,27 @@ export default function Header({ session }: Props) {
                         </Link>
                       </NavigationMenuLink>
                     </li>
-                    <ListItem href="/docs" title="Introduction">
-                      Re-usable components built using Radix UI and Tailwind
-                      CSS.
+                    <ListItem
+                      href="/leaderboard"
+                      title="Leaderboard"
+                      className="group"
+                    >
+                      Check out the Leaderboard!
                     </ListItem>
-                    <ListItem href="/docs/installation" title="Installation">
-                      How to install dependencies and structure your app.
+                    <ListItem
+                      href="/threads/popular"
+                      title="Popular thread"
+                      className="group"
+                    >
+                      Join the hottest conversations! Click here to see
+                      what&apos;s trending.
                     </ListItem>
                     <ListItem
                       title={"Explore more"}
                       href={`/topics`}
                       className="group"
                     >
-                      Explore for more topics{" "}
+                      Explore for more topics
                       <ArrowRight className="ml-2 w-4 h-4 group-hover:ml-4 transition-all duration-300 ease-linear" />
                     </ListItem>
                   </ul>
@@ -81,7 +88,7 @@ export default function Header({ session }: Props) {
                       <ListItem
                         key={category.name}
                         title={category.name}
-                        href={`/topics/${category.name.toLowerCase()}`}
+                        href={`/topics/${encodeURIComponent(category.name.toLowerCase())}`}
                       >
                         {category.description}
                       </ListItem>
@@ -94,8 +101,13 @@ export default function Header({ session }: Props) {
         </div>
         <div className="flex items-center gap-2">
           <SearchPopup />
-          <ThemeToggle />
-          {session ? <Button>Logout</Button> : <ProfileDropdown />}
+          {session ? (
+            <ProfileDropdown />
+          ) : (
+            <Button asChild>
+              <Link href={"/signin"}>Signin</Link>
+            </Button>
+          )}
         </div>
       </div>
     </header>
