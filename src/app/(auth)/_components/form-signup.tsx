@@ -48,7 +48,7 @@ const FormSignUp = () => {
           );
         },
         onError: (ctx) => {
-          toast.error(ctx.error.message);
+          toast.error(ctx.error.message ?? "Internal server error");
         },
       }
     );

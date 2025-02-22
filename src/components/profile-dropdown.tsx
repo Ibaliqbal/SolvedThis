@@ -20,7 +20,7 @@ const ProfileDropdown = () => {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Avatar className="h-7 w-7">
+        <Avatar className="h-7 w-7 cursor-pointer">
           <AvatarImage src={`https://avatar.vercel.sh/johndoe`} />
           <AvatarFallback>J</AvatarFallback>
         </Avatar>
@@ -28,7 +28,7 @@ const ProfileDropdown = () => {
       <DropdownMenuContent className="w-48" align="end">
         <DropdownMenuLabel>My Account</DropdownMenuLabel>
         <DropdownMenuSeparator />
-        <DropdownMenuGroup>
+        <DropdownMenuGroup className="space-y-2">
           <DropdownMenuItem asChild>
             <Link href={"/profile/settings"}>
               <User />
@@ -37,8 +37,13 @@ const ProfileDropdown = () => {
           </DropdownMenuItem>
           <DropdownMenuItem
             onClick={async () => {
-              await authClient.signOut();
-              router.refresh();
+              await authClient.signOut({
+                fetchOptions: {
+                  onSuccess: () => {
+                    router.refresh();
+                  },
+                },
+              });
             }}
           >
             <LogOut />

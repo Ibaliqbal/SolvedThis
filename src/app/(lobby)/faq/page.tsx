@@ -5,8 +5,7 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
-import { HelpCircle, Search } from "lucide-react";
-import { Input } from "@/components/ui/input";
+import { HelpCircle } from "lucide-react";
 
 const faqs = [
   {
@@ -49,11 +48,6 @@ export default function FAQPage() {
         <p className="text-xl text-muted-foreground mb-8">
           Find answers to common questions about using ForumApp
         </p>
-      </div>
-
-      <div className="relative">
-        <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground" />
-        <Input className="pl-10" placeholder="Search FAQs..." type="search" />
       </div>
 
       <Card>

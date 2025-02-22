@@ -1,9 +1,13 @@
+import { auth } from "@/auth";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { PlusCircle } from "lucide-react";
+import { headers } from "next/headers";
 import Link from "next/link";
+import { EditProfile } from "./_components/edit-profile";
+import { calculateUserLevel, dateFormat } from "@/utils/helper";
 
 // Dummy data for user profile
 const user = {
@@ -36,7 +40,15 @@ const recentThreads = [
   },
 ];
 
-export default function UserProfileSettingsPage() {
+export default async function UserProfileSettingsPage() {
+  const session = await auth.api.getSession({
+    headers: await headers(),
+  });
+
+  if (!session) return <div>Not authenticated</div>;
+
+  const levelInfo = calculateUserLevel(session.user.points);
+
   return (
     <div className="space-y-6">
       <div className="flex justify-between items-center">
@@ -54,9 +66,14 @@ export default function UserProfileSettingsPage() {
             <AvatarImage src={`https://avatar.vercel.sh/${user.username}`} />
             <AvatarFallback>{user.name[0]}</AvatarFallback>
           </Avatar>
-          <div>
-            <CardTitle className="text-2xl">{user.name}</CardTitle>
-            <p className="text-sm text-muted-foreground">@{user.username}</p>
+          <div className="grow flex md:flex-row flex-col gap-4">
+            <div className="grow">
+              <CardTitle className="text-2xl">{session?.user.name}</CardTitle>
+              <p className="text-sm text-muted-foreground">
+                @{session?.user.name.toLowerCase().split(" ").join("")}
+              </p>
+            </div>
+            <EditProfile />
           </div>
         </CardHeader>
         <CardContent>
@@ -64,7 +81,7 @@ export default function UserProfileSettingsPage() {
             <div>
               <p className="text-sm font-medium">Joined</p>
               <p className="text-sm text-muted-foreground">
-                {new Date(user.joinDate).toLocaleDateString()}
+                {dateFormat(session.user.createdAt)}
               </p>
             </div>
             <div>
@@ -81,16 +98,16 @@ export default function UserProfileSettingsPage() {
             </div>
             <div>
               <p className="text-sm font-medium">Level</p>
-              <p className="text-sm text-muted-foreground">{user.level}</p>
+              <p className="text-sm text-muted-foreground">
+                {levelInfo.currentLevel.level}
+              </p>
             </div>
             <div className="col-span-2 mt-4 w-fit">
               <p className="text-sm font-medium mb-2">Progress to Next Level</p>
-              <Progress
-                value={(user.currentPoints / user.nextLevelPoints) * 100}
-                className="w-full"
-              />
+              <Progress value={levelInfo.progress} className="w-full" />
               <p className="text-xs text-muted-foreground mt-1">
-                {user.currentPoints} / {user.nextLevelPoints} points
+                {session.user.points} / {levelInfo.nextLevel?.pointsNeeded}{" "}
+                points
               </p>
             </div>
           </div>

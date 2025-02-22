@@ -15,10 +15,12 @@ import {
 import { authClient } from "@/lib/auth-client";
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
-import { Loader2 } from "lucide-react";
+import { Loader2, Mail } from "lucide-react";
+import { useState } from "react";
 
 const FormSignin = () => {
   const router = useRouter();
+  const [pending, setPending] = useState(false);
   const form = useForm<SigninSchemaT>({
     resolver: zodResolver(signinSchema),
     defaultValues: {
@@ -36,18 +38,20 @@ const FormSignin = () => {
       },
       {
         onRequest: () => {
-          toast.loading("Signing in...");
+          setPending(true);
         },
         onSuccess: () => {
-          form.reset()
+          form.reset();
           router.refresh();
         },
         onError: (ctx) => {
-          toast.error(ctx.error.message);
+          console.log(ctx.error);
+          toast.error(ctx.error.message ?? "Internal server error");
           form.reset();
         },
       }
     );
+    setPending(false);
   }
 
   return (
@@ -90,8 +94,12 @@ const FormSignin = () => {
           )}
         />
         <Button className="w-full" disabled={form.formState.isSubmitting}>
-          {form.formState.isSubmitting && <Loader2 className="animate-spin" />}
-          Sign In
+          {form.formState.isSubmitting || pending ? (
+            <Loader2 className="animate-spin" />
+          ) : (
+            <Mail className="mr-2 h-4 w-4" />
+          )}
+          Sign In with Email
         </Button>
       </form>
     </Form>

@@ -61,6 +61,10 @@ const config: Config = {
         sm: "calc(var(--radius) - 4px)",
       },
       keyframes: {
+        /**
+         * Original source:
+         * @see https://github.com/juliusmarminge/acme-corp/blob/main/tooling/tailwind/index.ts
+         */
         "fade-up": {
           "0%": {
             opacity: "0",

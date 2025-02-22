@@ -1,6 +1,5 @@
 "use client";
 import {
-  Card,
   CardHeader,
   CardTitle,
   CardDescription,
@@ -35,8 +34,10 @@ import {
 } from "@/components/ui/command";
 import { CreatedThreadSchemaT, createThreadSchema } from "@/types/thread";
 import { topics } from "@/config/topics";
-import { Check, ChevronsUpDown } from "lucide-react";
+import { Check, ChevronsUpDown, Loader2 } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { createThreads } from "@/actions/threads";
+import toast from "react-hot-toast";
 
 const FormCreate = () => {
   const form = useForm<CreatedThreadSchemaT>({
@@ -48,9 +49,11 @@ const FormCreate = () => {
     },
   });
 
-  const onSubmit = (values: CreatedThreadSchemaT) => {
+  const onSubmit = async (values: CreatedThreadSchemaT) => {
     // Here you would typically send the data to your backend
-    console.log({ values });
+    const res = await createThreads(values);
+
+    toast.success(res.message);
     // Redirect to the home page after submission
     // router.push("/");
   };
@@ -157,7 +160,12 @@ const FormCreate = () => {
           />
         </CardContent>
         <CardFooter>
-          <Button type="submit">Create Thread</Button>
+          <Button type="submit" disabled={form.formState.isSubmitting}>
+            {form.formState.isSubmitting && (
+              <Loader2 className="animate-spin" />
+            )}
+            Create Thread
+          </Button>
         </CardFooter>
       </form>
     </Form>

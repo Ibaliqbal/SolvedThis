@@ -1,5 +1,6 @@
 import { LEVEL_SYSTEM } from "@/config/user";
 import { LevelData } from "@/types/user";
+import { format } from "date-fns";
 
 export function calculateUserLevel(points: number): {
   currentLevel: LevelData;
@@ -33,4 +34,12 @@ export function calculateUserLevel(points: number): {
     progress: Math.min(Math.max(progress, 0), 100),
     pointsToNext,
   };
+}
+
+// async function infoProfile(id: string) {
+//   const
+// }
+
+export function dateFormat(date: Date | string): string {
+  return format(date, "LLL dd, yyy");
 }

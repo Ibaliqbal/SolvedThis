@@ -8,6 +8,7 @@ import {
 import { Metadata } from "next";
 import Link from "next/link";
 import FormSignUp from "../_components/form-signup";
+import FormAuthLayout from "@/layouts/form-auth-layout";
 
 export const metadata: Metadata = {
   title: "Create an Account - Next.js Community",
@@ -17,26 +18,30 @@ export const metadata: Metadata = {
 
 const Page = () => {
   return (
-    <section className="md:w-1/2 p-6">
-      <CardHeader>
-        <CardTitle className="text-2xl font-bold">Create an account</CardTitle>
-        <CardDescription>Sign up to join our community</CardDescription>
-      </CardHeader>
-      <CardContent>
-        <FormSignUp />
-      </CardContent>
-      <CardFooter>
-        <p className="text-sm text-center text-gray-600 dark:text-gray-400 w-full">
-          Already have an account?{" "}
-          <Link
-            href="/signin"
-            className="text-blue-600 hover:underline dark:text-blue-400"
-          >
-            Sign in
-          </Link>
-        </p>
-      </CardFooter>
-    </section>
+    <FormAuthLayout>
+      <section className="md:w-1/2 p-6">
+        <CardHeader>
+          <CardTitle className="text-2xl font-bold">
+            Create an account
+          </CardTitle>
+          <CardDescription>Sign up to join our community</CardDescription>
+        </CardHeader>
+        <CardContent>
+          <FormSignUp />
+        </CardContent>
+        <CardFooter>
+          <p className="text-sm text-center text-gray-600 dark:text-gray-400 w-full">
+            Already have an account?{" "}
+            <Link
+              href="/signin"
+              className="text-blue-600 hover:underline dark:text-blue-400"
+            >
+              Sign in
+            </Link>
+          </p>
+        </CardFooter>
+      </section>
+    </FormAuthLayout>
   );
 };
 

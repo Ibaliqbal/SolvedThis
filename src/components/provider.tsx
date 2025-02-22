@@ -13,7 +13,13 @@ export function Providers({ children, ...props }: ThemeProviderProps) {
     <NextThemesProvider attribute="class" {...props}>
       <TopLoader />
       {children}
-      <Toaster position="top-center" />
+      <Toaster
+        position="top-center"
+        toastOptions={{
+          removeDelay: 2500,
+        }}
+        
+      />
     </NextThemesProvider>
   );
 }

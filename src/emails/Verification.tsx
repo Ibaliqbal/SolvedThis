@@ -65,7 +65,13 @@ export const EmailVerification: React.FC<EmailVerificationProps> = ({
             If you didn&apos;t create an account, you can safely ignore this
             email.
           </Text>
-          <Text style={{ color: "#555" }}>
+          <Text
+            style={{
+              color: "#8898aa",
+              fontSize: "12px",
+              marginTop: "30px",
+            }}
+          >
             This email was sent by SolvedThis. Please do not reply to this
             email.
           </Text>

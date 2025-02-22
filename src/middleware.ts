@@ -12,7 +12,7 @@ export default async function middleware(req: NextRequest) {
     return NextResponse.next();
   } else {
     if (!session && ["/profile/settings", "/create-thread"].includes(pathname))
-      return NextResponse.redirect(new URL("/", req.url));
+      return NextResponse.redirect(new URL("/signin", req.url));
   }
 
   return NextResponse.next();
@@ -28,9 +28,5 @@ export const config = {
      * - favicon.ico, sitemap.xml, robots.txt (metadata files)
      */
     "/((?!api|_next/static|_next/image|favicon.ico|sitemap.xml|robots.txt).*)",
-    "/signin",
-    "/signup",
-    "/profile/settings",
-    "/create-thread",
   ],
 };

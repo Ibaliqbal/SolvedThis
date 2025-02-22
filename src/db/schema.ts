@@ -4,15 +4,53 @@ import {
   integer,
   timestamp,
   boolean,
+  varchar,
+  index,
+  uuid,
+  pgEnum,
+  jsonb,
 } from "drizzle-orm/pg-core";
+import { generateId } from "./utils";
+import { relations, sql } from "drizzle-orm";
 
-export const UserTable = pgTable("user", {
+export const Topics = pgEnum("topics", [
+  "Technology",
+  "Gaming",
+  "Movies",
+  "Books",
+  "Music",
+  "Sports",
+  "Food & Cooking",
+  "Travel",
+  "Fitness & Health",
+  "Photography",
+  "Art & Design",
+  "Science",
+  "Finance & Investment",
+  "Career & Education",
+  "DIY & Crafts",
+  "Pets & Animals",
+  "Fashion",
+  "Parenting",
+  "Gardening",
+  "Mental Health",
+  "Humor",
+  "Anime & Manga",
+  "Crypto & Blockchain",
+  "Home Improvement",
+]);
+
+export const user = pgTable("user", {
   id: text("id").primaryKey(),
   name: text("name").notNull(),
   email: text("email").notNull().unique(),
   emailVerified: boolean("email_verified").notNull(),
   image: text("image"),
   points: integer("points").default(0).notNull(),
+  likesThread: jsonb("likes_thread")
+    .array()
+    .default(sql`ARRAY[]::jsonb[]`)
+    .$type<Array<string>>(),
   createdAt: timestamp("created_at").notNull(),
   updatedAt: timestamp("updated_at").notNull(),
 });
@@ -27,7 +65,7 @@ export const session = pgTable("session", {
   userAgent: text("user_agent"),
   userId: text("user_id")
     .notNull()
-    .references(() => UserTable.id, { onDelete: "cascade" }),
+    .references(() => user.id, { onDelete: "cascade" }),
 });
 
 export const account = pgTable("account", {
@@ -36,7 +74,7 @@ export const account = pgTable("account", {
   providerId: text("provider_id").notNull(),
   userId: text("user_id")
     .notNull()
-    .references(() => UserTable.id, { onDelete: "cascade" }),
+    .references(() => user.id, { onDelete: "cascade" }),
   accessToken: text("access_token"),
   refreshToken: text("refresh_token"),
   idToken: text("id_token"),
@@ -56,3 +94,92 @@ export const verification = pgTable("verification", {
   createdAt: timestamp("created_at"),
   updatedAt: timestamp("updated_at"),
 });
+
+export const ThreadsTable = pgTable(
+  "threads",
+  {
+    id: generateId,
+    title: varchar("title", { length: 255 }).default("").notNull(),
+    conntent: text("content").default("").notNull(),
+    createdAt: timestamp("created_at").defaultNow().notNull(),
+    userId: text("user_id")
+      .references(() => user.id, {
+        onDelete: "cascade",
+      })
+      .notNull(),
+    likes: integer("likes").default(0).notNull(),
+    topics: Topics("topics").default("Technology").notNull(),
+  },
+  (table) => {
+    return {
+      idIndex: index("idThreadIndex").on(table.id),
+      likeIndex: index("likeThreadIndex").on(table.likes),
+      userIdIndex: index("userIdThreadIndex").on(table.userId),
+      titleIndex: index("titleThreadIndex").on(table.title),
+    };
+  }
+);
+
+export const CommentsTable = pgTable(
+  "comments",
+  {
+    id: generateId,
+    content: text("content").default("").notNull(),
+    createdAt: timestamp("created_at").defaultNow().notNull(),
+    userId: text("user_id")
+      .references(() => user.id, {
+        onDelete: "cascade",
+      })
+      .notNull(),
+    threadId: uuid("thread_id")
+      .references(() => ThreadsTable.id, {
+        onDelete: "cascade",
+      })
+      .notNull(),
+  },
+  (table) => ({
+    userIdIndex: index("userIdCommentIndex").on(table.userId),
+    threadIdIndex: index("threadIdCommentIndex").on(table.threadId),
+  })
+);
+
+// relations
+export const userRelations = relations(user, ({ many }) => ({
+  sessions: many(session),
+  accounts: many(account),
+  threads: many(ThreadsTable),
+  comments: many(CommentsTable),
+}));
+
+export const sessionRelations = relations(session, ({ one }) => ({
+  user: one(user, {
+    fields: [session.userId],
+    references: [user.id],
+  }),
+}));
+
+export const accountRelations = relations(account, ({ one }) => ({
+  user: one(user, {
+    fields: [account.userId],
+    references: [user.id],
+  }),
+}));
+
+export const threadsRelations = relations(ThreadsTable, ({ one, many }) => ({
+  user: one(user, {
+    fields: [ThreadsTable.userId],
+    references: [user.id],
+  }),
+  comments: many(CommentsTable),
+}));
+
+export const commentsRelations = relations(CommentsTable, ({ one }) => ({
+  user: one(user, {
+    fields: [CommentsTable.userId],
+    references: [user.id],
+  }),
+  thread: one(ThreadsTable, {
+    fields: [CommentsTable.threadId],
+    references: [ThreadsTable.id],
+  }),
+}));
