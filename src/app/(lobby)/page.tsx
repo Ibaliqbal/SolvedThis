@@ -6,34 +6,8 @@ import {
   CardDescription,
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { ArrowRight, MessageSquare, TrendingUp, Users } from "lucide-react";
-
-const topics = [
-  {
-    slug: "technology",
-    name: "Technology",
-    description: "Discuss the latest in tech",
-    icon: <MessageSquare className="h-6 w-6" />,
-  },
-  {
-    slug: "gaming",
-    name: "Gaming",
-    description: "Share your gaming experiences",
-    icon: <TrendingUp className="h-6 w-6" />,
-  },
-  {
-    slug: "movies",
-    name: "Movies",
-    description: "Talk about your favorite films",
-    icon: <Users className="h-6 w-6" />,
-  },
-  {
-    slug: "books",
-    name: "Books",
-    description: "Explore the world of literature",
-    icon: <MessageSquare className="h-6 w-6" />,
-  },
-];
+import { topics } from "@/config/topics";
+import TopicCard from "@/components/topic-card";
 
 export default function Home() {
   return (
@@ -77,20 +51,15 @@ export default function Home() {
       <section>
         <h2 className="text-3xl font-bold mb-6">Popular Topics</h2>
         <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
-          {topics.map((topic) => (
-            <Link key={topic.slug} href={`/topics/${topic.slug}`}>
-              <Card className="hover:bg-muted/50 transition-colors h-full">
-                <CardHeader>
-                  <div className="mb-2">{topic.icon}</div>
-                  <CardTitle className="flex items-center justify-between">
-                    {topic.name}
-                    <ArrowRight className="h-4 w-4" />
-                  </CardTitle>
-                  <CardDescription>{topic.description}</CardDescription>
-                </CardHeader>
-              </Card>
-            </Link>
-          ))}
+          {topics
+            .slice(0, 4)
+            .map((topic) => ({
+              ...topic,
+              threadCount: Math.floor(Math.random() * 150) + 1,
+            }))
+            .map((topic) => (
+              <TopicCard key={topic.name} topic={topic} />
+            ))}
         </div>
       </section>
 

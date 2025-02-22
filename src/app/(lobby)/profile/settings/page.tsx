@@ -8,6 +8,7 @@ import { headers } from "next/headers";
 import Link from "next/link";
 import { EditProfile } from "./_components/edit-profile";
 import { calculateUserLevel, dateFormat } from "@/utils/helper";
+import ThreadCard from "@/components/thread-card";
 
 // Dummy data for user profile
 const user = {
@@ -26,17 +27,23 @@ const recentThreads = [
   {
     id: 1,
     title: "Best programming languages for beginners",
-    createdAt: "2023-04-01T12:00:00Z",
+    author: "johndoe",
+    replies: 15,
+    views: 100,
   },
   {
     id: 2,
     title: "How to optimize your website for speed",
-    createdAt: "2023-03-28T10:30:00Z",
+    author: "janedoe",
+    replies: 8,
+    views: 75,
   },
   {
     id: 3,
     title: "The future of artificial intelligence",
-    createdAt: "2023-03-25T15:45:00Z",
+    author: "bobsmith",
+    replies: 20,
+    views: 150,
   },
 ];
 
@@ -117,14 +124,7 @@ export default async function UserProfileSettingsPage() {
       <h2 className="text-2xl font-bold mt-8 mb-4">Recent Threads</h2>
       <div className="space-y-4">
         {recentThreads.map((thread) => (
-          <Card key={thread.id}>
-            <CardHeader>
-              <CardTitle>{thread.title}</CardTitle>
-              <p className="text-sm text-muted-foreground">
-                {new Date(thread.createdAt).toLocaleDateString()}
-              </p>
-            </CardHeader>
-          </Card>
+          <ThreadCard key={thread.id} thread={thread} />
         ))}
       </div>
     </div>

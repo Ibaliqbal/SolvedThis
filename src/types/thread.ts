@@ -1,7 +1,7 @@
 import { limitContent } from "@/config/thread";
 import { z } from "zod";
 
-const commentThreadSchema = z.object({
+const replyThreadSchema = z.object({
   content: z
     .string()
     .max(
@@ -11,7 +11,12 @@ const commentThreadSchema = z.object({
 });
 
 const createThreadSchema = z.object({
-  title: z.string().min(5, "Title must be at least 5 characters long"),
+  title: z.string()
+    .trim()
+    .min(5, "Title must be at least 5 characters long")
+    .refine((value) => value.trim().length >= 5, {
+      message: "Title cannot be just whitespace and must be at least 5 characters"
+    }),
   topic: z.string({
     required_error: "Please select a topics.",
   }),
@@ -26,6 +31,6 @@ const createThreadSchema = z.object({
 
 export type CreatedThreadSchemaT = z.infer<typeof createThreadSchema>;
 
-export type CommentThreadSchemaT = z.infer<typeof commentThreadSchema>;
+export type ReplyThreadSchemaT = z.infer<typeof replyThreadSchema>;
 
-export { commentThreadSchema, createThreadSchema };
+export { replyThreadSchema, createThreadSchema };

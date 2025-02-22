@@ -1,6 +1,7 @@
 "use server";
 
-import { CreatedThreadSchemaT } from "../types/thread";
+import { auth } from "@/auth";
+import { CreatedThreadSchemaT, ReplyThreadSchemaT } from "../types/thread";
 
 export const createThreads = async ({}: CreatedThreadSchemaT): Promise<{
   message: string;
@@ -9,5 +10,15 @@ export const createThreads = async ({}: CreatedThreadSchemaT): Promise<{
 
   return {
     message: "Success create threads",
+  };
+};
+
+export const createReply = async ({}: ReplyThreadSchemaT): Promise<{
+  message: string;
+}> => {
+  console.log("createReply");
+
+  return {
+    message: "Succes create reply",
   };
 };

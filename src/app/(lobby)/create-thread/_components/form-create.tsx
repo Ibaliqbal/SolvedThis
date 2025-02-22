@@ -44,7 +44,6 @@ const FormCreate = () => {
     resolver: zodResolver(createThreadSchema),
     defaultValues: {
       title: "",
-      topic: "",
       content: "",
     },
   });
@@ -52,6 +51,8 @@ const FormCreate = () => {
   const onSubmit = async (values: CreatedThreadSchemaT) => {
     // Here you would typically send the data to your backend
     const res = await createThreads(values);
+
+    console.log(values);
 
     toast.success(res.message);
     // Redirect to the home page after submission
@@ -120,7 +121,7 @@ const FormCreate = () => {
                           {topics.map((topic) => (
                             <CommandItem
                               value={topic.name}
-                              key={topic.name}
+                              key={topic.name.toLocaleLowerCase()}
                               onSelect={() => {
                                 form.setValue("topic", topic.name);
                               }}
@@ -152,7 +153,23 @@ const FormCreate = () => {
               <FormItem>
                 <FormLabel>Content</FormLabel>
                 <FormControl>
-                  <TextEditor content={field.value} onChange={field.onChange} />
+                  <TextEditor
+                    content={field.value}
+                    onChange={(content) => {
+                      // Menghapus semua whitespace dan line breaks
+                      const cleanContent = content.replace(/\s/g, "");
+                      // Mengecek apakah content hanya berisi kombinasi dari <p></p> atau <p><br></p>
+                      const isEmptyContent = /^(<p><\/p>|<p><br><\/p>)*$/.test(
+                        cleanContent
+                      );
+
+                      if (isEmptyContent) {
+                        field.onChange("");
+                      } else {
+                        field.onChange(content);
+                      }
+                    }}
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>

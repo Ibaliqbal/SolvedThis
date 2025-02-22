@@ -1,13 +1,5 @@
-import Link from "next/link";
-import {
-  Card,
-  CardHeader,
-  CardTitle,
-  CardDescription,
-  CardContent,
-} from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
 import { topics } from "@/config/topics";
+import TopicCard from "@/components/topic-card";
 
 export default function TopicsPage() {
   return (
@@ -17,24 +9,10 @@ export default function TopicsPage() {
         {topics
           .map((topic) => ({
             ...topic,
-            slug: topic.name.toLowerCase(),
             threadCount: Math.floor(Math.random() * 150) + 1,
           }))
           .map((topic) => (
-            <Link
-              key={topic.slug}
-              href={`/topics/${encodeURIComponent(topic.slug)}`}
-            >
-              <Card className="hover:bg-muted/50 transition-colors h-full">
-                <CardHeader>
-                  <CardTitle>{topic.name}</CardTitle>
-                  <CardDescription>{topic.description}</CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <Badge variant="secondary">{topic.threadCount} threads</Badge>
-                </CardContent>
-              </Card>
-            </Link>
+            <TopicCard key={topic.name} topic={topic} />
           ))}
       </div>
     </div>

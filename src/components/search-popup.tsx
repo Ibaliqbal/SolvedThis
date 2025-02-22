@@ -12,6 +12,7 @@ import {
   CommandList,
 } from "@/components/ui/command";
 import { Button } from "./ui/button";
+import { topics } from "@/config/topics";
 
 const SearchPopup = () => {
   const [open, setOpen] = React.useState(false);
@@ -47,9 +48,9 @@ const SearchPopup = () => {
         <CommandList>
           <CommandEmpty>No results found.</CommandEmpty>
           <CommandGroup heading="Suggestions">
-            <CommandItem>Calendar</CommandItem>
-            <CommandItem>Search Emoji</CommandItem>
-            <CommandItem>Calculator</CommandItem>
+            {topics.map((topic) => (
+              <CommandItem key={topic.name}>{topic.name}</CommandItem>
+            ))}
           </CommandGroup>
         </CommandList>
       </CommandDialog>
