@@ -88,7 +88,7 @@ export default function Header({ session }: Props) {
                       <ListItem
                         key={category.name}
                         title={category.name}
-                        href={`/topics/${encodeURIComponent(category.name.toLowerCase())}`}
+                        href={`/topics/${encodeURIComponent(category.name)}`}
                       >
                         {category.description}
                       </ListItem>
@@ -102,7 +102,7 @@ export default function Header({ session }: Props) {
         <div className="flex items-center gap-2">
           <SearchPopup />
           {session ? (
-            <ProfileDropdown />
+            <ProfileDropdown image={session.user.image} />
           ) : (
             <Button asChild>
               <Link href={"/signin"}>Signin</Link>

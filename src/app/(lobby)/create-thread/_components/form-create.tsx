@@ -52,11 +52,13 @@ const FormCreate = () => {
     // Here you would typically send the data to your backend
     const res = await createThreads(values);
 
-    console.log(values);
-
-    toast.success(res.message);
-    // Redirect to the home page after submission
-    // router.push("/");
+    if (!res.status) {
+      toast.error(res.message);
+    } else {
+      toast.success(res.message);
+    }
+    form.setValue("content", "");
+    form.reset();
   };
   return (
     <Form {...form}>

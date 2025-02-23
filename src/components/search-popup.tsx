@@ -12,10 +12,28 @@ import {
   CommandList,
 } from "@/components/ui/command";
 import { Button } from "./ui/button";
-import { topics } from "@/config/topics";
+import useDebounce from "@/hooks/useDebounce";
+import { getThreadSearch } from "@/actions/threads";
+import Link from "next/link";
 
 const SearchPopup = () => {
   const [open, setOpen] = React.useState(false);
+  const [value, setValue] = React.useState("");
+  const debounceValue = useDebounce(value);
+  const [result, setResult] = React.useState<
+    Array<{ id: string; title: string }>
+  >([]);
+
+  React.useEffect(() => {
+    async function getSearch() {
+      if (!debounceValue || debounceValue.trim() === "") return;
+      const res = await getThreadSearch(debounceValue);
+
+      setResult(res);
+    }
+
+    getSearch();
+  }, [debounceValue]);
 
   React.useEffect(() => {
     const down = (e: KeyboardEvent) => {
@@ -44,14 +62,24 @@ const SearchPopup = () => {
         </kbd>
       </Button>
       <CommandDialog open={open} onOpenChange={setOpen}>
-        <CommandInput placeholder="Type a command or search..." />
+        <CommandInput
+          placeholder="Type a command or search..."
+          value={value}
+          onValueChange={(e) => setValue(e)}
+        />
         <CommandList>
           <CommandEmpty>No results found.</CommandEmpty>
-          <CommandGroup heading="Suggestions">
-            {topics.map((topic) => (
-              <CommandItem key={topic.name}>{topic.name}</CommandItem>
-            ))}
-          </CommandGroup>
+          {result.length > 0 ? (
+            <CommandGroup heading="Suggestions" className="mb-2">
+              {result.map((thread) => (
+                <CommandItem key={thread.id}>
+                  <Link href={`/threads/${thread.id}`} prefetch={true}>
+                    {thread.title}
+                  </Link>
+                </CommandItem>
+              ))}
+            </CommandGroup>
+          ) : null}
         </CommandList>
       </CommandDialog>
     </>

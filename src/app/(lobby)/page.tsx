@@ -6,8 +6,8 @@ import {
   CardDescription,
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { topics } from "@/config/topics";
-import TopicCard from "@/components/topic-card";
+import { PopularSkeleton, PopularTopics } from "@/components/popular-topics";
+import { Suspense } from "react";
 
 export default function Home() {
   return (
@@ -51,15 +51,9 @@ export default function Home() {
       <section>
         <h2 className="text-3xl font-bold mb-6">Popular Topics</h2>
         <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
-          {topics
-            .slice(0, 4)
-            .map((topic) => ({
-              ...topic,
-              threadCount: Math.floor(Math.random() * 150) + 1,
-            }))
-            .map((topic) => (
-              <TopicCard key={topic.name} topic={topic} />
-            ))}
+          <Suspense fallback={<PopularSkeleton />}>
+            <PopularTopics />
+          </Suspense>
         </div>
       </section>
 

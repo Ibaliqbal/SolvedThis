@@ -1,10 +1,8 @@
 import { Badge } from "@/components/ui/badge";
+import { Skeleton } from "@/components/ui/skeleton";
 import { TrendingUp } from "lucide-react";
-import ThreadCard from "@/components/thread-card";
-import { getPopularThreads } from "@/actions/threads";
 
-export default async function PopularThreadsPage() {
-  const threads = await getPopularThreads();
+const Loading = () => {
   return (
     <div className="max-w-4xl mx-auto space-y-8">
       <div className="flex justify-between items-center">
@@ -18,10 +16,12 @@ export default async function PopularThreadsPage() {
         Discover the hottest discussions in our community
       </p>
       <div className="flex flex-col gap-4">
-        {threads.map((thread) => (
-          <ThreadCard key={thread.id} thread={thread} />
+        {Array.from({ length: 4 }).map((_, index) => (
+          <Skeleton key={index} className="w-full h-[130px]" />
         ))}
       </div>
     </div>
   );
-}
+};
+
+export default Loading;

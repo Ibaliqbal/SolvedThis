@@ -1,4 +1,5 @@
 "use client";
+import { createReply } from "@/actions/threads";
 import TextEditor from "@/components/text-editor";
 import { Button } from "@/components/ui/button";
 import {
@@ -11,15 +12,31 @@ import {
 } from "@/components/ui/form";
 import { replyThreadSchema, ReplyThreadSchemaT } from "@/types/thread";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { Loader2 } from "lucide-react";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
-const FormComment = () => {
+import toast from "react-hot-toast";
+
+type Props = {
+  id: string;
+};
+const FormComment = ({ id }: Props) => {
   const form = useForm<ReplyThreadSchemaT>({
     resolver: zodResolver(replyThreadSchema),
     defaultValues: { content: "" },
   });
+  const [key, setKey] = useState(0);
 
-  function handleSubmit(data: ReplyThreadSchemaT) {
-    console.log(data.content);
+  async function handleSubmit(data: ReplyThreadSchemaT) {
+    const res = await createReply(data, id);
+
+    if (!res.status) {
+      toast.error(res.message);
+    } else {
+      toast.success(res.message);
+      form.reset({ content: "<p></p>" });
+      setKey((prev) => prev + 1);
+    }
   }
 
   return (
@@ -36,6 +53,7 @@ const FormComment = () => {
               <FormLabel className="text-xl font-bold">Add a comment</FormLabel>
               <FormControl>
                 <TextEditor
+                  key={key}
                   content={field.value}
                   onChange={(content) => {
                     // Menghapus semua whitespace dan line breaks
@@ -57,7 +75,10 @@ const FormComment = () => {
             </FormItem>
           )}
         />
-        <Button>Post Comment</Button>
+        <Button type="submit" disabled={form.formState.isSubmitting}>
+          {form.formState.isSubmitting && <Loader2 className="animate-spin" />}
+          Post Comment
+        </Button>
       </form>
     </Form>
   );

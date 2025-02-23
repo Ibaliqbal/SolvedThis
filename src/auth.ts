@@ -9,6 +9,10 @@ import { eq } from "drizzle-orm";
 export const auth = betterAuth({
   database: drizzleAdapter(db, {
     provider: "pg",
+    schema: {
+      ...schema,
+      user: schema.UsersTable,
+    },
   }),
   session: {
     expiresIn: 60 * 60 * 24 * 5, // 7 days
@@ -17,8 +21,8 @@ export const auth = betterAuth({
   plugins: [
     openAPI(),
     customSession(async ({ session, user }) => {
-      const userData = await db.query.user.findFirst({
-        where: eq(schema.user.id, user.id as string),
+      const userData = await db.query.UsersTable.findFirst({
+        where: eq(schema.UsersTable.id, user.id as string),
       });
       return {
         session,

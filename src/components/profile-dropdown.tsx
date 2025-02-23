@@ -15,14 +15,20 @@ import Link from "next/link";
 import { authClient } from "@/lib/auth-client";
 import { useRouter } from "next/navigation";
 
-const ProfileDropdown = () => {
+type Props = {
+  image: string | null | undefined;
+};
+
+const ProfileDropdown = ({ image }: Props) => {
   const router = useRouter();
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <Avatar className="h-7 w-7 cursor-pointer">
-          <AvatarImage src={`https://avatar.vercel.sh/johndoe`} />
-          <AvatarFallback>J</AvatarFallback>
+          <AvatarImage src={image ?? ""} />
+          <AvatarFallback>
+            <User className="w-4 h-4" />
+          </AvatarFallback>
         </Avatar>
       </DropdownMenuTrigger>
       <DropdownMenuContent className="w-48" align="end">

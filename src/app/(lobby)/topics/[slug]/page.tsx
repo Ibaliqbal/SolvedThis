@@ -1,39 +1,44 @@
 import ThreadCard from "@/components/thread-card";
+import { getThreadsByTopic } from "@/actions/threads";
+import { CardContent } from "@/components/ui/card";
+import { MessageSquare, PlusCircle } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import Link from "next/link";
 
-// Dummy data for threads
-const threads = [
-  {
-    id: 1,
-    title: "Best programming languages for beginners",
-    author: "johndoe",
-    replies: 15,
-    views: 100,
-  },
-  {
-    id: 2,
-    title: "How to optimize your website for speed",
-    author: "janedoe",
-    replies: 8,
-    views: 75,
-  },
-  {
-    id: 3,
-    title: "The future of artificial intelligence",
-    author: "bobsmith",
-    replies: 20,
-    views: 150,
-  },
-];
-
-export default function CategoryPage({ params }: { params: { slug: string } }) {
+export default async function CategoryPage({
+  params,
+}: {
+  params: { slug: string };
+}) {
   const slug = decodeURIComponent(params.slug);
+
+  const threads = await getThreadsByTopic(slug);
+
   return (
     <div className="space-y-6">
       <h1 className="text-3xl font-bold capitalize">{slug} Discussions</h1>
       <div className="flex flex-col gap-4">
-        {threads.map((thread) => (
-          <ThreadCard key={thread.id} thread={thread} />
-        ))}
+        {threads.length > 0 ? (
+          threads.map((thread) => (
+            <ThreadCard key={thread.id} thread={thread} />
+          ))
+        ) : (
+          <div>
+            <CardContent className="flex flex-col items-center justify-center py-10">
+              <MessageSquare className="h-12 w-12 text-muted-foreground mb-4" />
+              <h3 className="text-lg font-semibold mb-2">No threads yet</h3>
+              <p className="text-muted-foreground text-center mb-4">
+                Be the first to start a discussion in this topic!
+              </p>
+              <Button asChild>
+                <Link href={"/create-thread"}>
+                  <PlusCircle className="mr-2 h-4 w-4" />
+                  Create New Thread
+                </Link>
+              </Button>
+            </CardContent>
+          </div>
+        )}
       </div>
     </div>
   );

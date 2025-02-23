@@ -1,94 +1,88 @@
 import FormComment from "../_components/form-comment";
-import ReplyCard from "../_components/reply-card";
+import { ReplyCard } from "../_components/reply-card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import DOMPurify from "isomorphic-dompurify";
 import Share from "../_components/share";
 import { dateFormat } from "@/utils/helper";
 import Likes from "../_components/likes";
+import { domSanitizeConfig } from "@/config/thread";
+import { getDetailThread } from "@/actions/threads";
+import { notFound } from "next/navigation";
+import { unstable_cache } from "next/cache";
+import { MessageCircle } from "lucide-react";
 
-// Dummy data for a thread and its comments
-const thread = {
-  id: 1,
-  title: "Best programming languages for beginners",
-  content: `<p>I'm new to programming and wondering which language I should start with. Any suggestions? Here are some options I've heard about:</p>
-    <ul>
-      <li>Python</li>
-      <li>JavaScript</li>
-      <li>Java</li>
-      <li>C++</li>
-    </ul>
-  <p>What do you think would be best for a complete beginner?</p>`,
-  author: "johndoe",
-  createdAt: "2023-04-01T12:00:00Z",
-};
+const cacheThread = unstable_cache(
+  async (id: string) => await getDetailThread(id),
+  [`detail-thread`],
+  { revalidate: 60 * 60 * 2 }
+);
 
-const comments = [
-  {
-    id: 1,
-    content: `<p>Python is a great language for beginners!</p>`,
-    author: "janedoe",
-    createdAt: "2023-04-01T13:00:00Z",
-  },
-  {
-    id: 2,
-    content: `<p>I would recommend JavaScript as it's widely used in web development.</p>`,
-    author: "bobsmith",
-    createdAt: "2023-04-01T14:30:00Z",
-  },
-];
+export default async function ThreadPage({
+  params,
+}: {
+  params: { id: string };
+}) {
+  const data = await cacheThread(params.id);
 
-// {
-//   params,
-//   searchParams,
-// }: {
-//   params: { id: string };
-//   searchParams: { [key: string]: string | string[] | undefined };
-// }
+  if (!data.thread) notFound();
 
-export default function ThreadPage() {
   return (
     <section className="space-y-6">
       <div className="space-y-3">
         <Card>
           <CardHeader>
-            <CardTitle>{thread.title}</CardTitle>
+            <CardTitle>{data.thread.title}</CardTitle>
             <div className="flex items-center space-x-2 text-sm text-muted-foreground">
               <Avatar className="h-6 w-6">
-                <AvatarImage
-                  src={`https://avatar.vercel.sh/${thread.author}`}
-                />
+                <AvatarImage src={data.thread.user.image ?? ""} />
                 <AvatarFallback>
-                  {thread.author[0].toUpperCase()}
+                  {data.thread.user.name[0].toUpperCase()}
                 </AvatarFallback>
               </Avatar>
-              <span>{thread.author}</span>
+              <span>{data.thread.user.name}</span>
               <span>•</span>
-              <span>{dateFormat(thread.createdAt)}</span>
+              <span>{dateFormat(data.thread.createdAt)}</span>
             </div>
           </CardHeader>
           <CardContent>
             <div
               dangerouslySetInnerHTML={{
-                __html: DOMPurify.sanitize(thread.content),
+                __html: DOMPurify.sanitize(
+                  data.thread.content,
+                  domSanitizeConfig
+                ),
               }}
+              className="w-full prose"
             />
           </CardContent>
         </Card>
         <div className="flex items-center gap-3">
-          <Likes />
-          <Share />
+          <Likes likes={data.thread.likes} id={params.id} />
+          <Share id={params.id} />
         </div>
       </div>
 
       <h2 className="text-2xl font-bold mt-8 mb-4">Comments</h2>
       <div className="space-y-4">
-        {comments.map((comment) => (
-          <ReplyCard key={comment.id} reply={comment} />
-        ))}
+        {data.replies.length > 0 ? (
+          data.replies.map((reply) => (
+            <ReplyCard key={reply.id} reply={reply} />
+          ))
+        ) : (
+          <div>
+            <CardContent className="flex flex-col items-center justify-center py-10">
+              <MessageCircle className="h-12 w-12 text-muted-foreground mb-4" />
+              <h3 className="text-lg font-semibold mb-2">No comments yet</h3>
+              <p className="text-muted-foreground text-center mb-4">
+                Be the first to share your thoughts on this thread!
+              </p>
+            </CardContent>
+          </div>
+        )}
       </div>
 
-      <FormComment />
+      <FormComment id={params.id} />
     </section>
   );
 }

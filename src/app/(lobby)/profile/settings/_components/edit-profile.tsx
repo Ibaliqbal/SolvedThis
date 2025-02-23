@@ -25,10 +25,10 @@ export function EditProfile() {
     const file = e.target.files?.[0];
     if (file) {
       const reader = new FileReader();
+      reader.readAsDataURL(file);
       reader.onloadend = () => {
         setAvatar(reader.result as string);
       };
-      reader.readAsDataURL(file);
     }
   };
 

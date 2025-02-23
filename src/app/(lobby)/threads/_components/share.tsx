@@ -70,12 +70,13 @@ const shareOptions = (url: string) => {
   ];
 };
 
-const Share = () => {
+const Share = ({ id }: { id: string }) => {
   const [copiedAlert, setCopiedAlert] = useState(false);
+  const url = `${process.env.NEXT_PUBLIC_APP_URL}/threads/${id}`;
 
   const copyToClipboard = async () => {
     try {
-      await navigator.clipboard.writeText(`${process.env.NEXT_PUBLIC_APP_URL}/threads/`);
+      await navigator.clipboard.writeText(url);
       setCopiedAlert(true);
       setTimeout(() => setCopiedAlert(false), 2000);
     } catch (err) {
@@ -109,11 +110,7 @@ const Share = () => {
         )}
 
         <div className="flex items-center space-x-2 mt-4">
-          <Input
-            value={`${process.env.NEXT_PUBLIC_APP_URL}/threads/`}
-            readOnly
-            className="flex-1 bg-muted"
-          />
+          <Input value={url} readOnly className="flex-1 bg-muted" />
           <Button variant="secondary" size="icon" onClick={copyToClipboard}>
             <Copy className="w-4 h-4" />
           </Button>
@@ -124,19 +121,17 @@ const Share = () => {
             Share via
           </h3>
           <div className="grid grid-cols-3 gap-4">
-            {shareOptions(`${process.env.NEXT_PUBLIC_APP_URL}/threads/`).map(
-              (option) => (
-                <Button
-                  key={option.name}
-                  variant="outline"
-                  className={`flex flex-col items-center justify-center gap-2 p-4 h-auto transition-colors ${option.bgColor} hover:bg-opacity-80`}
-                  onClick={option.action}
-                >
-                  <option.icon className={`w-6 h-6 ${option.color}`} />
-                  <span className="text-xs font-medium">{option.name}</span>
-                </Button>
-              )
-            )}
+            {shareOptions(url).map((option) => (
+              <Button
+                key={option.name}
+                variant="outline"
+                className={`flex flex-col items-center justify-center gap-2 p-4 h-auto transition-colors ${option.bgColor} hover:bg-opacity-80`}
+                onClick={option.action}
+              >
+                <option.icon className={`w-6 h-6 ${option.color}`} />
+                <span className="text-xs font-medium">{option.name}</span>
+              </Button>
+            ))}
           </div>
         </div>
       </DialogContent>

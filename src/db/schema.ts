@@ -40,7 +40,7 @@ export const Topics = pgEnum("topics", [
   "Home Improvement",
 ]);
 
-export const user = pgTable("user", {
+export const UsersTable = pgTable("user", {
   id: text("id").primaryKey(),
   name: text("name").notNull(),
   email: text("email").notNull().unique(),
@@ -65,7 +65,7 @@ export const session = pgTable("session", {
   userAgent: text("user_agent"),
   userId: text("user_id")
     .notNull()
-    .references(() => user.id, { onDelete: "cascade" }),
+    .references(() => UsersTable.id, { onDelete: "cascade" }),
 });
 
 export const account = pgTable("account", {
@@ -74,7 +74,7 @@ export const account = pgTable("account", {
   providerId: text("provider_id").notNull(),
   userId: text("user_id")
     .notNull()
-    .references(() => user.id, { onDelete: "cascade" }),
+    .references(() => UsersTable.id, { onDelete: "cascade" }),
   accessToken: text("access_token"),
   refreshToken: text("refresh_token"),
   idToken: text("id_token"),
@@ -100,15 +100,15 @@ export const ThreadsTable = pgTable(
   {
     id: generateId,
     title: varchar("title", { length: 255 }).default("").notNull(),
-    conntent: text("content").default("").notNull(),
+    content: text("content").default("").notNull(),
     createdAt: timestamp("created_at").defaultNow().notNull(),
     userId: text("user_id")
-      .references(() => user.id, {
+      .references(() => UsersTable.id, {
         onDelete: "cascade",
       })
       .notNull(),
     likes: integer("likes").default(0).notNull(),
-    topics: Topics("topics").default("Technology").notNull(),
+    topic: Topics("topics").default("Technology").notNull(),
   },
   (table) => {
     return {
@@ -127,7 +127,7 @@ export const CommentsTable = pgTable(
     content: text("content").default("").notNull(),
     createdAt: timestamp("created_at").defaultNow().notNull(),
     userId: text("user_id")
-      .references(() => user.id, {
+      .references(() => UsersTable.id, {
         onDelete: "cascade",
       })
       .notNull(),
@@ -144,7 +144,7 @@ export const CommentsTable = pgTable(
 );
 
 // relations
-export const userRelations = relations(user, ({ many }) => ({
+export const userRelations = relations(UsersTable, ({ many }) => ({
   sessions: many(session),
   accounts: many(account),
   threads: many(ThreadsTable),
@@ -152,34 +152,40 @@ export const userRelations = relations(user, ({ many }) => ({
 }));
 
 export const sessionRelations = relations(session, ({ one }) => ({
-  user: one(user, {
+  user: one(UsersTable, {
     fields: [session.userId],
-    references: [user.id],
+    references: [UsersTable.id],
   }),
 }));
 
 export const accountRelations = relations(account, ({ one }) => ({
-  user: one(user, {
+  user: one(UsersTable, {
     fields: [account.userId],
-    references: [user.id],
+    references: [UsersTable.id],
   }),
 }));
 
 export const threadsRelations = relations(ThreadsTable, ({ one, many }) => ({
-  user: one(user, {
+  user: one(UsersTable, {
     fields: [ThreadsTable.userId],
-    references: [user.id],
+    references: [UsersTable.id],
   }),
   comments: many(CommentsTable),
 }));
 
 export const commentsRelations = relations(CommentsTable, ({ one }) => ({
-  user: one(user, {
+  user: one(UsersTable, {
     fields: [CommentsTable.userId],
-    references: [user.id],
+    references: [UsersTable.id],
   }),
   thread: one(ThreadsTable, {
     fields: [CommentsTable.threadId],
     references: [ThreadsTable.id],
   }),
 }));
+
+// types
+
+export type TThread = typeof ThreadsTable.$inferSelect;
+export type TUser = typeof UsersTable.$inferSelect;
+export type TComment = typeof CommentsTable.$inferSelect;

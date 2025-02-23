@@ -38,41 +38,6 @@ import {
 import { Label } from "./ui/label";
 import { Input } from "./ui/input";
 
-const editorStyles = `
-  .ProseMirror {
-    @apply text-foreground max-h-full overflow-y-auto;
-  }
-  .ProseMirror pre {
-    @apply bg-muted text-muted-foreground p-4 rounded-md font-mono;
-  }
-  .dark .ProseMirror pre {
-    @apply bg-gray-800;
-  }
-
-  .prose iframe,
-  .ProseMirror iframe {
-    @apply w-full aspect-video;
-  }
-  
-  .prose ul {
-    list-style-type: disc;
-    padding-left: 1.5em;
-  }
-
-  .prose ol {
-    list-style-type: decimal;
-    padding-left: 1.5em;
-  }
-
-  .prose ul li {
-    display: list-item;
-  }
-
-  .prose ol li {
-    display: list-item;
-  }
-`;
-
 export default function TextEditor({
   content,
   onChange,
@@ -123,9 +88,6 @@ export default function TextEditor({
 
   return (
     <div>
-      <style jsx global>
-        {editorStyles}
-      </style>
       <div
         className={cn(
           "border rounded-md overflow-auto max-h-[20rem] pb-6 custom-vertical-scroll"
