@@ -2,9 +2,7 @@
 # 🚀 SolvedThis
 </div>
 
-<div align="center">
-  ![Logo](/public/icon.png)
-</div>
+![Logo](/public/icon.png)
 
 ![App Screenshoot](/public/home.png)
 
