@@ -1,6 +1,4 @@
-<div align="center">
 # 🚀 SolvedThis
-</div>
 
 ![App Screenshoot](/public/home.png)
 
