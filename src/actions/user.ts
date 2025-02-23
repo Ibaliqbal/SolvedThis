@@ -4,6 +4,7 @@ import { getSession } from "./session";
 import { db } from "@/db";
 import { CommentsTable, ThreadsTable, UsersTable } from "@/db/schema";
 import { AnyPgColumn } from "drizzle-orm/pg-core";
+import { calculateUserLevel } from "@/utils/helper";
 
 const threadsCount = (userId: AnyPgColumn) =>
   db
@@ -38,4 +39,36 @@ export const getProfile = async () => {
   });
 
   return userData;
+};
+
+export const getLeaderboard = async () => {
+  const data = await db.query.UsersTable.findMany({
+    columns: {
+      id: true,
+      name: true,
+      image: true,
+      points: true,
+    },
+    extras: ({ id }) => ({
+      repliesCount: sql`${repliesCount(id)}`.mapWith(Number).as("repliesCount"),
+      threadsCount: sql`${threadsCount(id)}`.mapWith(Number).as("threadsCount"),
+    }),
+    orderBy: ({ points }, { desc }) => [desc(points)],
+    limit: 50,
+  });
+
+  const leaderboard = data.map((user) => {
+    const levelInfo = calculateUserLevel(user.points);
+    const totalPosts = Number(user.repliesCount) + Number(user.threadsCount);
+
+    return {
+      id: user.id,
+      name: user.name,
+      image: user.image,
+      level: levelInfo.currentLevel.level,
+      totalPosts,
+    };
+  });
+
+  return leaderboard;
 };
