@@ -2,8 +2,6 @@
 # 🚀 SolvedThis
 </div>
 
-![Logo](/public/icon.png)
-
 ![App Screenshoot](/public/home.png)
 
 SolvedThis is a modern discussion platform that empowers communities to engage in meaningful conversations. Built with cutting-edge technologies, it offers a seamless experience for creating, sharing, and engaging with content. SolvedThis promotes healthy discussions within a secure and user-friendly environment.
