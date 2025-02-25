@@ -48,10 +48,6 @@ const topics = [
     description: "Discuss scientific discoveries and theories",
   },
   {
-    name: "Politics",
-    description: "Discuss current political events",
-  },
-  {
     name: "Finance & Investment",
     description: "Share investment strategies and financial advice",
   },

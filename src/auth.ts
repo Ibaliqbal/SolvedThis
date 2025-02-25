@@ -1,10 +1,9 @@
 import { betterAuth, BetterAuthOptions } from "better-auth";
 import { drizzleAdapter } from "better-auth/adapters/drizzle";
-import { customSession, openAPI } from "better-auth/plugins";
+import { openAPI } from "better-auth/plugins";
 import { db } from "./db";
 import { sendResetPassword, sendVerification } from "./actions/emails";
 import * as schema from "./db/schema";
-import { eq } from "drizzle-orm";
 
 export const auth = betterAuth({
   database: drizzleAdapter(db, {
@@ -14,25 +13,23 @@ export const auth = betterAuth({
       user: schema.UsersTable,
     },
   }),
+  user: {
+    additionalFields: {
+      likesThread: {
+        type: "string[]",
+        required: false,
+      },
+      points: {
+        type: "number",
+        required: false,
+      },
+    },
+  },
   session: {
-    expiresIn: 60 * 60 * 24 * 5, // 7 days
+    expiresIn: 60 * 60 * 24 * 5, // 5 days
     updateAge: 60 * 60 * 24 * 5, // 1 day (every 1 day the session expiration is updated)
   },
-  plugins: [
-    openAPI(),
-    customSession(async ({ session, user }) => {
-      const userData = await db.query.UsersTable.findFirst({
-        where: eq(schema.UsersTable.id, user.id as string),
-      });
-      return {
-        session,
-        user: {
-          ...user,
-          points: userData?.points ?? 0,
-        },
-      };
-    }),
-  ],
+  plugins: [openAPI()],
   emailAndPassword: {
     enabled: true,
     autoSignIn: false,

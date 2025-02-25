@@ -9,21 +9,19 @@ import Likes from "../_components/likes";
 import { domSanitizeConfig } from "@/config/thread";
 import { getDetailThread } from "@/actions/threads";
 import { notFound } from "next/navigation";
-import { unstable_cache } from "next/cache";
 import { MessageCircle } from "lucide-react";
+import Link from "next/link";
+import { getSession } from "@/actions/session";
 
-const cacheThread = unstable_cache(
-  async (id: string) => await getDetailThread(id),
-  [`detail-thread`],
-  { revalidate: 60 * 60 * 2 }
-);
 
 export default async function ThreadPage({
   params,
 }: {
   params: { id: string };
 }) {
-  const data = await cacheThread(params.id);
+  const data = await getDetailThread(params.id);
+  const session = await getSession();
+  const isLikeIt = session?.user.likesThread?.includes(params.id) ?? false;
 
   if (!data.thread) notFound();
 
@@ -40,7 +38,11 @@ export default async function ThreadPage({
                   {data.thread.user.name[0].toUpperCase()}
                 </AvatarFallback>
               </Avatar>
-              <span>{data.thread.user.name}</span>
+              <Link
+                href={`/profile/${encodeURIComponent(data.thread.user.name)}`}
+              >
+                <span>{data.thread.user.name}</span>
+              </Link>
               <span>•</span>
               <span>{dateFormat(data.thread.createdAt)}</span>
             </div>
@@ -58,7 +60,7 @@ export default async function ThreadPage({
           </CardContent>
         </Card>
         <div className="flex items-center gap-3">
-          <Likes likes={data.thread.likes} id={params.id} />
+          <Likes likes={data.thread.likes} id={params.id} isLikeIt={isLikeIt} />
           <Share id={params.id} />
         </div>
       </div>

@@ -15,7 +15,7 @@ const Layout = ({ children }: { children: ReactNode }) => {
         <CardHeader>
           <CardTitle className="text-2xl font-bold">Top Users</CardTitle>
         </CardHeader>
-        <CardContent>{children}</CardContent>
+        <CardContent className="space-y-3">{children}</CardContent>
       </Card>
 
       <div className="text-center">

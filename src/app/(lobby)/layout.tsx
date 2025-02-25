@@ -4,7 +4,7 @@ import Header from "@/components/header";
 import { ReactNode } from "react";
 
 const Layout = async ({ children }: { children: ReactNode }) => {
-  const session = await getSession()
+  const session = await getSession();
 
   return (
     <main className="min-h-screen flex flex-col">

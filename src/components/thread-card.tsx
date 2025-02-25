@@ -6,9 +6,10 @@ import {
 } from "@/components/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import Link from "next/link";
+import { ThreadResponse } from "@/actions/threads";
 
 type Props = {
-  thread: any;
+  thread: ThreadResponse;
 };
 
 const ThreadCard = ({ thread }: Props) => {
@@ -26,7 +27,7 @@ const ThreadCard = ({ thread }: Props) => {
           </div>
           <CardDescription className="flex items-center mt-2">
             <Avatar className="h-6 w-6 mr-2">
-              <AvatarImage src={thread.user.image} />
+              <AvatarImage src={thread.user.image ?? ""} />
               <AvatarFallback>
                 {thread.user.name[0].toUpperCase()}
               </AvatarFallback>

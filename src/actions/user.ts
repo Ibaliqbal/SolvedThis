@@ -5,6 +5,11 @@ import { db } from "@/db";
 import { CommentsTable, ThreadsTable, UsersTable } from "@/db/schema";
 import { AnyPgColumn } from "drizzle-orm/pg-core";
 import { calculateUserLevel } from "@/utils/helper";
+import { utApi } from "@/lib/uploadthing";
+import { revalidatePath } from "next/cache";
+import { UploadFileResult } from "uploadthing/types";
+import { headers } from "next/headers";
+import { rateLimit } from "@/lib/rateLimit";
 
 const threadsCount = (userId: AnyPgColumn) =>
   db
@@ -31,6 +36,7 @@ export const getProfile = async () => {
       name: true,
       points: true,
       createdAt: true,
+      bio: true,
     },
     extras: ({ id }) => ({
       repliesCount: sql`${repliesCount(id)}`.mapWith(Number).as("repliesCount"),
@@ -71,4 +77,127 @@ export const getLeaderboard = async () => {
   });
 
   return leaderboard;
+};
+
+export const getUserProfile = async (name: string) => {
+  const userData = await db.query.UsersTable.findFirst({
+    where: eq(UsersTable.name, name),
+    columns: {
+      id: true,
+      image: true,
+      email: true,
+      name: true,
+      points: true,
+      createdAt: true,
+    },
+    extras: ({ id }) => ({
+      repliesCount: sql`${repliesCount(id)}`.mapWith(Number).as("repliesCount"),
+      threadsCount: sql`${threadsCount(id)}`.mapWith(Number).as("threadsCount"),
+    }),
+  });
+
+  return userData;
+};
+
+export const updateProfile = async (form: FormData) => {
+  const session = await getSession();
+
+  if (!session)
+    return {
+      message: "Login first...",
+      status: false,
+    };
+
+  const avatar = form.get("file");
+  const name = form.get("name") as string;
+  const bio = form.get("bio") as string;
+
+  let responseUploadthing: UploadFileResult | undefined;
+
+  if (avatar && avatar instanceof File) {
+    if (!avatar.type.startsWith("image/")) {
+      return {
+        message: "Please upload an image file",
+        status: false,
+      };
+    }
+
+    if (avatar.size > 2 * 1024 * 1024) {
+      return {
+        message: "Image size should be less than 2MB",
+        status: false,
+      };
+    }
+
+    responseUploadthing = await utApi.uploadFiles(avatar as File);
+  }
+
+  await db
+    .update(UsersTable)
+    .set({
+      name,
+      image: responseUploadthing?.data?.url ?? session.user.image,
+      bio,
+    })
+    .where(eq(UsersTable.id, session.user.id));
+
+  revalidatePath("/profile/settings");
+
+  return {
+    message: "Success",
+    status: true,
+  };
+};
+
+export const likeToggleThreads = async (isLikeIt: boolean, id: string) => {
+  const session = await getSession();
+  const ip = headers().get("x-forwarded-for") ?? "unknown";
+  const isRateLimited = rateLimit(ip);
+
+  if (!session)
+    return {
+      status: false,
+      message: "Login first...",
+    };
+
+  if (isRateLimited)
+    return {
+      message:
+        "You have exceeded the maximum number of requests. Please try again later.",
+      status: false,
+    };
+
+  try {
+    await db.transaction(async (tx) => {
+      await tx
+        .update(ThreadsTable)
+        .set({
+          likes: isLikeIt
+            ? sql`${ThreadsTable.likes} - ${Number("1")}`
+            : sql`${ThreadsTable.likes} + ${Number("1")}`,
+        })
+        .where(eq(ThreadsTable.id, id));
+
+      await tx
+        .update(UsersTable)
+        .set({
+          likesThread: isLikeIt
+            ? (session.user.likesThread ?? []).filter((thread) => thread !== id)
+            : [...(session.user.likesThread ?? []), id],
+          updatedAt: sql`NOW()`,
+        })
+        .where(eq(UsersTable.id, session.user.id));
+    });
+
+    return {
+      message: "Success like",
+      status: true,
+    };
+  } catch (error) {
+    console.log(error);
+    return {
+      message: "Failed to like",
+      status: false,
+    };
+  }
 };

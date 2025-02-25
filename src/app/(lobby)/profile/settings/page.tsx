@@ -5,11 +5,13 @@ import Link from "next/link";
 import {
   RecentThreads,
   RecentThreadsLoading,
-} from "./_components/recent-threads";
+} from "../_components/recent-threads";
 import { Suspense } from "react";
 import Profile from "./_components/profile";
+import { getSession } from "@/actions/session";
 
 export default async function UserProfileSettingsPage() {
+  const session = await getSession();
   return (
     <div className="space-y-6">
       <div className="flex justify-between items-center">
@@ -25,7 +27,7 @@ export default async function UserProfileSettingsPage() {
 
       <h2 className="text-2xl font-bold mt-8 mb-4">Recent Threads</h2>
       <Suspense fallback={<RecentThreadsLoading />}>
-        <RecentThreads />
+        <RecentThreads name={session?.user.id as string} />
       </Suspense>
     </div>
   );

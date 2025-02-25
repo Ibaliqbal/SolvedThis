@@ -1,55 +1,35 @@
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
-import { Progress } from "@/components/ui/progress";
+import { getUserProfile } from "@/actions/user";
+import { notFound } from "next/navigation";
+import { calculateUserLevel, dateFormat } from "@/utils/helper";
+import { Suspense } from "react";
+import { RecentThreads, RecentThreadsLoading } from "../_components/recent-threads";
 
-// Dummy data for user profile
-const user = {
-  username: "johndoe",
-  name: "John Doe",
-  joinDate: "2023-01-01",
-  threadCount: 15,
-  commentCount: 87,
-  level: 3,
-  currentPoints: 750,
-  nextLevelPoints: 1000,
-};
-
-// Dummy data for user's recent threads
-const recentThreads = [
-  {
-    id: 1,
-    title: "Best programming languages for beginners",
-    createdAt: "2023-04-01T12:00:00Z",
-  },
-  {
-    id: 2,
-    title: "How to optimize your website for speed",
-    createdAt: "2023-03-28T10:30:00Z",
-  },
-  {
-    id: 3,
-    title: "The future of artificial intelligence",
-    createdAt: "2023-03-25T15:45:00Z",
-  },
-];
-
-export default function UserProfilePage({
+export default async function UserProfilePage({
   params,
 }: {
   params: { username: string };
 }) {
   const username = decodeURIComponent(params.username);
+  const user = await getUserProfile(username);
+
+  if (!user) notFound();
+
+  const levelInfo = calculateUserLevel(user.points);
   return (
     <div className="space-y-6">
       <Card>
         <CardHeader className="flex flex-row items-center space-x-4">
           <Avatar className="h-20 w-20">
-            <AvatarImage src={`https://avatar.vercel.sh/${user.username}`} />
+            <AvatarImage src={user.image ?? ""} />
             <AvatarFallback>{user.name[0]}</AvatarFallback>
           </Avatar>
           <div>
             <CardTitle className="text-2xl">{user.name}</CardTitle>
-            <p className="text-sm text-muted-foreground">@{user.username}</p>
+            <p className="text-sm text-muted-foreground">
+              @{user.name.toLowerCase().split(" ").join("")}
+            </p>
           </div>
         </CardHeader>
         <CardContent>
@@ -57,33 +37,25 @@ export default function UserProfilePage({
             <div>
               <p className="text-sm font-medium">Joined</p>
               <p className="text-sm text-muted-foreground">
-                {new Date(user.joinDate).toLocaleDateString()}
+                {dateFormat(user.createdAt)}
               </p>
             </div>
             <div>
               <p className="text-sm font-medium">Threads</p>
               <p className="text-sm text-muted-foreground">
-                {user.threadCount}
+                {user.threadsCount}
               </p>
             </div>
             <div>
               <p className="text-sm font-medium">Comments</p>
               <p className="text-sm text-muted-foreground">
-                {user.commentCount}
+                {user.repliesCount}
               </p>
             </div>
             <div>
               <p className="text-sm font-medium">Level</p>
-              <p className="text-sm text-muted-foreground">{user.level}</p>
-            </div>
-            <div className="col-span-2 mt-4 w-fit">
-              <p className="text-sm font-medium mb-2">Progress to Next Level</p>
-              <Progress
-                value={(user.currentPoints / user.nextLevelPoints) * 100}
-                className="w-full"
-              />
-              <p className="text-xs text-muted-foreground mt-1">
-                {user.currentPoints} / {user.nextLevelPoints} points
+              <p className="text-sm text-muted-foreground">
+                {levelInfo.currentLevel.level}
               </p>
             </div>
           </div>
@@ -91,18 +63,9 @@ export default function UserProfilePage({
       </Card>
 
       <h2 className="text-2xl font-bold mt-8 mb-4">Recent Threads</h2>
-      <div className="space-y-4">
-        {recentThreads.map((thread) => (
-          <Card key={thread.id}>
-            <CardHeader>
-              <CardTitle>{thread.title}</CardTitle>
-              <p className="text-sm text-muted-foreground">
-                {new Date(thread.createdAt).toLocaleDateString()}
-              </p>
-            </CardHeader>
-          </Card>
-        ))}
-      </div>
+      <Suspense fallback={<RecentThreadsLoading />}>
+        <RecentThreads name={user.id as string} />
+      </Suspense>
     </div>
   );
 }

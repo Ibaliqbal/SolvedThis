@@ -90,7 +90,7 @@ export default function TextEditor({
     <div>
       <div
         className={cn(
-          "border rounded-md overflow-auto max-h-[20rem] pb-6 custom-vertical-scroll"
+          "border rounded-md overflow-auto max-h-[40rem] pb-6 custom-vertical-scroll"
         )}
       >
         <MenuBar editor={editor} />
@@ -303,7 +303,7 @@ function MenuBar({ editor }: { editor: Editor | null }) {
           <DialogFooter className="sm:justify-start">
             <DialogClose asChild>
               <Button type="button" variant="secondary" onClick={addYoutube}>
-                Close
+                Apply
               </Button>
             </DialogClose>
           </DialogFooter>

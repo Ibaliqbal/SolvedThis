@@ -5,6 +5,7 @@ import { domSanitizeConfig } from "@/config/thread";
 import { TComment, TUser } from "@/db/schema";
 import { dateFormat } from "@/utils/helper";
 import DOMPurify from "isomorphic-dompurify";
+import Link from "next/link";
 
 type Props = {
   reply: Pick<TComment, "id" | "content" | "createdAt"> & {
@@ -14,14 +15,16 @@ type Props = {
 
 const ReplyCard = ({ reply }: Props) => {
   return (
-    <Card>
+    <Card className="animate-fade-up">
       <CardHeader>
         <div className="flex items-center space-x-2 text-sm text-muted-foreground">
           <Avatar className="h-6 w-6">
             <AvatarImage src={reply.user.image ?? ""} />
             <AvatarFallback>{reply.user.name[0].toUpperCase()}</AvatarFallback>
           </Avatar>
-          <span>{reply.user.name}</span>
+          <Link href={`/profile/${encodeURIComponent(reply.user.name)}`}>
+            <span>{reply.user.name}</span>
+          </Link>
           <span>•</span>
           <span>{dateFormat(reply.createdAt)}</span>
         </div>

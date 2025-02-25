@@ -38,6 +38,7 @@ import { Check, ChevronsUpDown, Loader2 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { createThreads } from "@/actions/threads";
 import toast from "react-hot-toast";
+import { useState } from "react";
 
 const FormCreate = () => {
   const form = useForm<CreatedThreadSchemaT>({
@@ -47,6 +48,7 @@ const FormCreate = () => {
       content: "",
     },
   });
+  const [key, setKey] = useState(0);
 
   const onSubmit = async (values: CreatedThreadSchemaT) => {
     // Here you would typically send the data to your backend
@@ -57,8 +59,8 @@ const FormCreate = () => {
     } else {
       toast.success(res.message);
     }
-    form.setValue("content", "");
     form.reset();
+    setKey((prev) => prev + 1);
   };
   return (
     <Form {...form}>
@@ -156,6 +158,7 @@ const FormCreate = () => {
                 <FormLabel>Content</FormLabel>
                 <FormControl>
                   <TextEditor
+                    key={key}
                     content={field.value}
                     onChange={(content) => {
                       // Menghapus semua whitespace dan line breaks

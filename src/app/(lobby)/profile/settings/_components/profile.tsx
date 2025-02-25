@@ -10,6 +10,8 @@ const Profile = async () => {
   const user = await getProfile();
   const levelInfo = calculateUserLevel(user?.points ?? 0);
 
+  console.log(user);
+
   return (
     <Card>
       <CardHeader className="flex flex-row items-center space-x-4">
@@ -24,10 +26,14 @@ const Profile = async () => {
               @{user?.name.toLowerCase().split(" ").join("")}
             </p>
           </div>
-          <EditProfile />
+          <EditProfile
+            name={user?.name ?? ""}
+            image={user?.image}
+            bio={user?.bio ?? ""}
+          />
         </div>
       </CardHeader>
-      <CardContent>
+      <CardContent className="space-y-4">
         <div className="grid grid-cols-2 gap-4">
           <div>
             <p className="text-sm font-medium">Joined</p>
@@ -60,6 +66,12 @@ const Profile = async () => {
               {user?.points} / {levelInfo.nextLevel?.pointsNeeded} points
             </p>
           </div>
+        </div>
+        <div className="space-y-2">
+          <h3 className="text-lg font-semibold">Bio</h3>
+          <p className="text-sm text-muted-foreground">
+            {user?.bio ? user.bio : "~"}
+          </p>
         </div>
       </CardContent>
     </Card>

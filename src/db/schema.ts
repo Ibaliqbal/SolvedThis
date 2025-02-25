@@ -47,6 +47,7 @@ export const UsersTable = pgTable("user", {
   emailVerified: boolean("email_verified").notNull(),
   image: text("image"),
   points: integer("points").default(0).notNull(),
+  bio: text("bio").default("").notNull(),
   likesThread: jsonb("likes_thread")
     .array()
     .default(sql`ARRAY[]::jsonb[]`)

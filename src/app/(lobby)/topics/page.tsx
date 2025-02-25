@@ -1,6 +1,7 @@
 import { topics } from "@/config/topics";
 import TopicCard from "@/components/topic-card";
 import { db } from "@/db";
+import { Topics } from "@/db/schema";
 
 export default async function TopicsPage() {
   const thread = await db.query.ThreadsTable.findMany({
@@ -15,12 +16,13 @@ export default async function TopicsPage() {
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
         {topics
           .map((topic) => ({
-            ...topic,
+            topic: topic.name as (typeof Topics.enumValues)[number],
+            description: topic.description,
             threadCount: thread.filter((thread) => thread.topic === topic.name)
               .length,
           }))
           .map((topic) => (
-            <TopicCard key={topic.name} topic={topic} />
+            <TopicCard key={topic.topic} topic={topic} />
           ))}
       </div>
     </div>

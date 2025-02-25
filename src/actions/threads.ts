@@ -2,7 +2,7 @@
 
 import { CreatedThreadSchemaT, ReplyThreadSchemaT } from "../types/thread";
 import { db } from "@/db";
-import { revalidatePath } from "next/cache";
+import { revalidatePath, unstable_noStore as noStore } from "next/cache";
 import { count, eq, sql } from "drizzle-orm";
 import { AnyPgColumn } from "drizzle-orm/pg-core";
 import { getSession } from "./session";
@@ -16,8 +16,10 @@ import {
   UsersTable,
   ThreadsTable,
 } from "@/db/schema";
+import { headers } from "next/headers";
+import { rateLimit } from "@/lib/rateLimit";
 
-type ThreadResponse = {
+export type ThreadResponse = {
   repliesCount: number;
   user: Pick<TUser, "name" | "image">;
 } & Pick<TThread, "id" | "title" | "likes">;
@@ -37,6 +39,8 @@ export const createThreads = async ({
   status: boolean;
 }> => {
   const session = await getSession();
+  const ip = headers().get("x-forwarded-for") ?? "unknown";
+  const isRateLimited = rateLimit(ip);
 
   if (!session)
     return {
@@ -44,7 +48,14 @@ export const createThreads = async ({
       status: false,
     };
 
-  const levelInfo = calculateUserLevel(session.user.points);
+  if (isRateLimited)
+    return {
+      message:
+        "You have exceeded the maximum number of requests. Please try again later.",
+      status: false,
+    };
+
+  const levelInfo = calculateUserLevel(session.user.points ?? 0);
 
   await db.transaction(async (tx) => {
     await tx.insert(ThreadsTable).values({
@@ -76,6 +87,8 @@ export const createReply = async (
   status: boolean;
 }> => {
   const session = await getSession();
+  const ip = headers().get("x-forwarded-for") ?? "unknown";
+  const isRateLimited = rateLimit(ip);
 
   if (!session)
     return {
@@ -83,7 +96,14 @@ export const createReply = async (
       status: false,
     };
 
-  const levelInfo = calculateUserLevel(session.user.points);
+  if (isRateLimited)
+    return {
+      message:
+        "You have exceeded the maximum number of requests. Please try again later.",
+      status: false,
+    };
+
+  const levelInfo = calculateUserLevel(session.user.points ?? 0);
 
   await db.transaction(async (tx) => {
     await tx.insert(CommentsTable).values({
@@ -135,13 +155,11 @@ export const getThreadsByTopic = async (
   return threads;
 };
 
-export const getRecentsThread = async (): Promise<Array<ThreadResponse>> => {
-  const session = await getSession();
-
-  if (!session) return [];
-
+export const getRecentsThread = async (
+  userId: string
+): Promise<Array<ThreadResponse>> => {
   const threads = await db.query.ThreadsTable.findMany({
-    where: eq(ThreadsTable.userId, session.user.id),
+    where: eq(ThreadsTable.userId, userId),
     with: {
       user: {
         columns: {
@@ -178,10 +196,10 @@ export const getPopularThreads = async (): Promise<Array<ThreadResponse>> => {
       title: true,
       likes: true,
     },
-    orderBy: ({ likes }, { desc }) => [desc(likes)],
     extras: ({ id }) => ({
       repliesCount: sql`${repliesCount(id)}`.mapWith(Number).as("repliesCount"),
     }),
+    orderBy: ({ likes }, { desc }) => [desc(likes)],
     limit: 10,
   });
 
@@ -252,6 +270,10 @@ export const getDetailThread = async (
 export const getThreadSearch = async (
   value: string
 ): Promise<Array<{ id: string; title: string }>> => {
+  noStore();
+
+  if (value.length <= 0) return [];
+
   const threads = await db.query.ThreadsTable.findMany({
     where: ({ title }, { ilike }) => ilike(title, `%${value}%`),
     columns: {

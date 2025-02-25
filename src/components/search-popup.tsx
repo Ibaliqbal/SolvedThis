@@ -2,7 +2,6 @@
 
 import * as React from "react";
 import { Search } from "lucide-react";
-
 import {
   CommandDialog,
   CommandEmpty,
@@ -10,30 +9,46 @@ import {
   CommandInput,
   CommandItem,
   CommandList,
-} from "@/components/ui/command";
+} from "./ui/command";
 import { Button } from "./ui/button";
 import useDebounce from "@/hooks/useDebounce";
 import { getThreadSearch } from "@/actions/threads";
-import Link from "next/link";
+import { useRouter } from "nextjs-toploader/app";
+import { Skeleton } from "./ui/skeleton";
 
 const SearchPopup = () => {
+  const router = useRouter();
   const [open, setOpen] = React.useState(false);
   const [value, setValue] = React.useState("");
-  const debounceValue = useDebounce(value);
-  const [result, setResult] = React.useState<
-    Array<{ id: string; title: string }>
-  >([]);
+  const debounceValue = useDebounce(value, 500);
+  const [result, setResult] = React.useState<Array<{
+    id: string;
+    title: string;
+  }> | null>(null);
+  const [loading, setLoading] = React.useState(false);
 
   React.useEffect(() => {
-    async function getSearch() {
-      if (!debounceValue || debounceValue.trim() === "") return;
-      const res = await getThreadSearch(debounceValue);
-
-      setResult(res);
+    // Only search when debounced value has content
+    if (debounceValue.length <= 0) {
+      return;
     }
 
-    getSearch();
-  }, [debounceValue]);
+    async function getSearch() {
+      setLoading(true);
+      try {
+        const res = await getThreadSearch(debounceValue);
+        setResult(res);
+      } catch (error) {
+        console.error("Error searching:", error);
+        setResult(null);
+        setLoading(false);
+      }
+
+      setLoading(false);
+    }
+
+    void getSearch();
+  }, [debounceValue]); // Add value to dependency array
 
   React.useEffect(() => {
     const down = (e: KeyboardEvent) => {
@@ -61,25 +76,48 @@ const SearchPopup = () => {
           <span className="text-xs">⌘</span>K
         </kbd>
       </Button>
-      <CommandDialog open={open} onOpenChange={setOpen}>
+      <CommandDialog
+        open={open}
+        onOpenChange={(open) => {
+          setOpen(open);
+          if (!open) {
+            setValue("");
+            setResult(null); // Reset result when dialog closes
+          }
+        }}
+      >
         <CommandInput
-          placeholder="Type a command or search..."
+          placeholder="Search threads..."
           value={value}
-          onValueChange={(e) => setValue(e)}
+          onValueChange={setValue}
         />
         <CommandList>
-          <CommandEmpty>No results found.</CommandEmpty>
-          {result.length > 0 ? (
+          <CommandEmpty
+            className={loading ? "hidden" : "py-6 text-center text-sm"}
+          >
+            No results found.
+          </CommandEmpty>
+          {loading
+            ? Array.from({ length: 2 }).map((_, i) => (
+                <Skeleton key={i} className="w-full h-9 mb-2 mx-2" />
+              ))
+            : null}
+          {result && result.length > 0 && !loading && (
             <CommandGroup heading="Suggestions" className="mb-2">
               {result.map((thread) => (
-                <CommandItem key={thread.id}>
-                  <Link href={`/threads/${thread.id}`} prefetch={true}>
-                    {thread.title}
-                  </Link>
+                <CommandItem
+                  key={thread.id}
+                  className="h-9 cursor-pointer"
+                  onSelect={() => {
+                    router.push(`/threads/${thread.id}`);
+                    setOpen(false)
+                  }}
+                >
+                  {thread.title}
                 </CommandItem>
               ))}
             </CommandGroup>
-          ) : null}
+          )}
         </CommandList>
       </CommandDialog>
     </>
