@@ -11,9 +11,15 @@ import FormSignUp from "../_components/form-signup";
 import FormAuthLayout from "@/layouts/form-auth-layout";
 
 export const metadata: Metadata = {
-  title: "Create an Account - Next.js Community",
+  title: "Create an Account | SolvedThis",
   description:
     "Join our community and start exploring the world of technology. Sign up to create a new account and start contributing to discussions.",
+  openGraph: {
+    title: "Create an Account | SolvedThis",
+    description:
+      "Join our community and start exploring the world of technology. Sign up to create a new account and start contributing to discussions.",
+    url: `${process.env.NEXT_PUBLIC_APP_URL}/signup`,
+  },
 };
 
 const Page = () => {

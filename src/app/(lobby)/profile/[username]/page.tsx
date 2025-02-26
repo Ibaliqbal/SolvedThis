@@ -4,7 +4,11 @@ import { getUserProfile } from "@/actions/user";
 import { notFound } from "next/navigation";
 import { calculateUserLevel, dateFormat } from "@/utils/helper";
 import { Suspense } from "react";
-import { RecentThreads, RecentThreadsLoading } from "../_components/recent-threads";
+import {
+  RecentThreads,
+  RecentThreadsLoading,
+} from "../_components/recent-threads";
+import { cn } from "@/lib/utils";
 
 export default async function UserProfilePage({
   params,
@@ -32,7 +36,7 @@ export default async function UserProfilePage({
             </p>
           </div>
         </CardHeader>
-        <CardContent>
+        <CardContent className="space-y-4">
           <div className="grid grid-cols-2 gap-4">
             <div>
               <p className="text-sm font-medium">Joined</p>
@@ -58,6 +62,17 @@ export default async function UserProfilePage({
                 {levelInfo.currentLevel.level}
               </p>
             </div>
+          </div>
+          <div className="space-y-2">
+            <h3 className="text-lg font-semibold">Bio</h3>
+            <p
+              className={cn(
+                "text-sm text-muted-foreground",
+                !user.bio && "italic"
+              )}
+            >
+              {user?.bio ? user.bio : "This user has no bio information..."}
+            </p>
           </div>
         </CardContent>
       </Card>

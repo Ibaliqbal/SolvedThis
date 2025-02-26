@@ -89,6 +89,7 @@ export const getUserProfile = async (name: string) => {
       name: true,
       points: true,
       createdAt: true,
+      bio: true,
     },
     extras: ({ id }) => ({
       repliesCount: sql`${repliesCount(id)}`.mapWith(Number).as("repliesCount"),

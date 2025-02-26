@@ -1,5 +1,18 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Metadata } from "next";
 import { ReactNode } from "react";
+
+export const metadata: Metadata = {
+  title: "Leaderboard | SolvedThis",
+  description:
+    "Check out the top contributors in our climbing community, and learn how to level up by following our community guidelines.",
+  openGraph: {
+    title: "Leaderboard | SolvedThis",
+    description:
+      "Check out the top contributors in our climbing community, and learn how to level up by following our community guidelines.",
+    url: `${process.env.NEXT_PUBLIC_APP_URL}/leaderboard`,
+  },
+};
 
 const Layout = ({ children }: { children: ReactNode }) => {
   return (

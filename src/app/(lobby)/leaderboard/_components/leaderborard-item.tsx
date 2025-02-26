@@ -1,6 +1,7 @@
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Trophy, Medal, Award } from "lucide-react";
+import Link from "next/link";
 
 const LeaderboardItem = ({
   user,
@@ -33,7 +34,10 @@ const LeaderboardItem = ({
   };
 
   return (
-    <div className="flex items-center space-x-4 py-4">
+    <Link
+      href={`/profile/${encodeURIComponent(user.name)}`}
+      className="flex items-center space-x-4 py-4"
+    >
       <div className="flex-shrink-0 w-8 text-center">{getRankIcon(rank)}</div>
       <Avatar className="h-10 w-10">
         <AvatarImage src={user.image ?? ""} alt={user.name} />
@@ -44,7 +48,7 @@ const LeaderboardItem = ({
         <p className="text-sm text-muted-foreground">Level {user.level}</p>
       </div>
       <Badge variant="secondary">{user.totalPosts} posts</Badge>
-    </div>
+    </Link>
   );
 };
 

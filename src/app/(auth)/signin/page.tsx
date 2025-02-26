@@ -14,9 +14,15 @@ import LoginGithub from "../_components/login-github";
 import FormAuthLayout from "@/layouts/form-auth-layout";
 
 export const metadata: Metadata = {
-  title: "Signin - SolvedThis",
+  title: "Signin | SolvedThis",
   description:
-    "Masuk ke SolvedThis untuk mengakses berbagai topik menarik dan bergabung dengan komunitas kami. Temukan diskusi yang sesuai dengan minat Anda dan mulai berbagi pengalaman sekarang!",
+    "Log in to SolvedThis to access a variety of interesting topics and join our community. Find discussions that match your interests and start sharing your experiences now!",
+  openGraph: {
+    title: "Signin | SolvedThis",
+    description:
+      "Log in to SolvedThis to access a variety of interesting topics and join our community. Find discussions that match your interests and start sharing your experiences now!",
+    url: `${process.env.NEXT_PUBLIC_APP_URL}/signin`,
+  },
 };
 
 const Page = () => {

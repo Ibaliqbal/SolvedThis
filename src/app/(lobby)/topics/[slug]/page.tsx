@@ -4,6 +4,26 @@ import { CardContent } from "@/components/ui/card";
 import { MessageSquare, PlusCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
+import { Metadata } from "next";
+import { topics } from "@/config/topics";
+
+export const generateMetadata = ({
+  params,
+}: {
+  params: { slug: string };
+}): Metadata => {
+  const slug = decodeURIComponent(params.slug);
+  const findTopic = topics.find((topic) => topic.name === slug);
+  return {
+    title: `Discussions in ${slug} | SolvedThis`,
+    description: findTopic?.description,
+    openGraph: {
+      title: `Discussions in ${slug} | SolvedThis`,
+      description: findTopic?.description,
+      url: `${process.env.NEXT_PUBLIC_APP_URL}/${slug}`,
+    },
+  };
+};
 
 export default async function CategoryPage({
   params,

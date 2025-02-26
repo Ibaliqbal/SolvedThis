@@ -43,3 +43,12 @@ export function calculateUserLevel(points: number): {
 export function dateFormat(date: Date | string): string {
   return format(date, "LLL dd, yyy");
 }
+
+export function safeUrl(url: string): string {
+  return url
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&apos;");
+}

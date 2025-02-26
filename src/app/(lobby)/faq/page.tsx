@@ -6,6 +6,19 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import { HelpCircle } from "lucide-react";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Frequently Asked Questions | SolvedThis",
+  description:
+    "Looking for the answers to some of the most common questions about our community. If you don't find your answer, don't hesitate to ask.",
+  openGraph: {
+    title: "Frequently Asked Questions | SolvedThis",
+    description:
+      "Looking for the answers to some of the most common questions about our community. If you don't find your answer, don't hesitate to ask.",
+    url: `${process.env.NEXT_PUBLIC_APP_URL}/faq`,
+  },
+};
 
 const faqs = [
   {

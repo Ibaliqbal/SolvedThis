@@ -3,6 +3,19 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Mail, MessageCircle } from "lucide-react";
+import { Metadata } from "next";
+
+export const metadat: Metadata = {
+  title: "Support | SolvedThis",
+  description:
+    "Get help with your questions or concerns. Visit our support page for immediate assistance.",
+  openGraph: {
+    title: "Support | SolvedThis",
+    description:
+      "Get help with your questions or concerns. Visit our support page for immediate assistance.",
+    url: `${process.env.NEXT_PUBLIC_APP_URL}/support`,
+  },
+};
 
 export default function SupportPage() {
   return (

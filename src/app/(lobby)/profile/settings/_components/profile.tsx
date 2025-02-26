@@ -10,8 +10,6 @@ const Profile = async () => {
   const user = await getProfile();
   const levelInfo = calculateUserLevel(user?.points ?? 0);
 
-  console.log(user);
-
   return (
     <Card>
       <CardHeader className="flex flex-row items-center space-x-4">

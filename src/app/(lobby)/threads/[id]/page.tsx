@@ -12,7 +12,22 @@ import { notFound } from "next/navigation";
 import { MessageCircle } from "lucide-react";
 import Link from "next/link";
 import { getSession } from "@/actions/session";
+import { Metadata } from "next";
 
+export const generateMetadata = async ({
+  params,
+}: {
+  params: { id: string };
+}): Promise<Metadata> => {
+  const data = await getDetailThread(params.id);
+  return {
+    title: `${data.thread?.title} | SolvedThis`,
+    openGraph: {
+      title: `${data.thread?.title} | SolvedThis`,
+      url: `${process.env.NEXT_PUBLIC_APP_URL}/threads/${params.id}`,
+    },
+  };
+};
 
 export default async function ThreadPage({
   params,

@@ -7,6 +7,19 @@ import {
 } from "@/components/ui/card";
 import { AlertCircle, Lightbulb, MessageSquare } from "lucide-react";
 import FormCreate from "./_components/form-create";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Create a New Thread | SolvedThis",
+  description:
+    "Join our community and start exploring the world of technology. Create a new thread to share your ideas, ask questions, or share updates.",
+  openGraph: {
+    title: "Create a New Thread | SolvedThis",
+    description:
+      "Join our community and start exploring the world of technology. Create a new thread to share your ideas, ask questions, or share updates.",
+    url: `${process.env.NEXT_PUBLIC_APP_URL}/create-thread`,
+  },
+};
 
 export default function CreateThreadPage() {
   return (

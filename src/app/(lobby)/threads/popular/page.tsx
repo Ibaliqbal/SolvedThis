@@ -2,6 +2,17 @@ import { Badge } from "@/components/ui/badge";
 import { TrendingUp } from "lucide-react";
 import ThreadCard from "@/components/thread-card";
 import { getPopularThreads } from "@/actions/threads";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Popular Threads | SolvedThis",
+  description: "Discover the hottest discussions in our community",
+  openGraph: {
+    title: "Popular Threads | SolvedThis",
+    description: "Discover the hottest discussions in our community",
+    url: `${process.env.NEXT_PUBLIC_APP_URL}/threads/popular`,
+  },
+};
 
 export default async function PopularThreadsPage() {
   const threads = await getPopularThreads();

@@ -1,5 +1,18 @@
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { AlertCircle, MessageSquare, Shield, Users } from "lucide-react";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Community Guidelines | SolvedThis",
+  description:
+    "SolvedThis community guidelines, ensuring a positive experience for all users.",
+  openGraph: {
+    url: `${process.env.NEXT_PUBLIC_APP_URL}/guidelines`,
+    title: "Community Guidelines | SolvedThis",
+    description:
+      "SolvedThis community guidelines, ensuring a positive experience for all users.",
+  },
+};
 
 export default function GuidelinesPage() {
   return (
