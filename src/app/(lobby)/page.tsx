@@ -48,7 +48,12 @@ export default function Home() {
         </div>
       </section>
 
-      <section>
+      <section
+        className="animate-fade-up delay-[400ms] duration-700"
+        style={{
+          animationFillMode: "both",
+        }}
+      >
         <h2 className="text-3xl font-bold mb-6">Popular Topics</h2>
         <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
           <Suspense fallback={<PopularSkeleton />}>

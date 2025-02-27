@@ -36,10 +36,6 @@ export function calculateUserLevel(points: number): {
   };
 }
 
-// async function infoProfile(id: string) {
-//   const
-// }
-
 export function dateFormat(date: Date | string): string {
   return format(date, "LLL dd, yyy");
 }

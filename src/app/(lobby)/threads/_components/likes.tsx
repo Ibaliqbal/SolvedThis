@@ -34,7 +34,7 @@ const Likes = ({ likes, isLikeIt, id }: Props) => {
     <Button
       variant={optimisticIsLikeIt ? "destructive" : "ghost"}
       size="sm"
-      className="text-muted-foreground hover:text-foreground"
+      className="dark:text-muted-foreground dark:hover:text-foreground"
       onClick={() => {
         startTransition(handleLike);
       }}

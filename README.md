@@ -42,6 +42,7 @@ SolvedThis is a modern discussion platform that empowers communities to engage i
 - **Shadcn/UI:** Beautiful UI components
 - **TailwindCSS:** Utility-first CSS
 - **Tiptap:** Rich text editor integration
+- **Uploadthing:** Manage file uploads
 
 ## Run Locally
 
@@ -66,35 +67,35 @@ SolvedThis is a modern discussion platform that empowers communities to engage i
 4. Set up environment variables
 
 ```bash
-    cp .env.example .env.local
+  cp .env.example .env.local
 ```
 
 5. Set up the database
    Before running the project, set up your PostgreSQL database and update your environment variables:
 
 ```bash
-    BETTER_AUTH_SECRET=
-    BETTER_AUTH_URL=http://localhost:3000
+  BETTER_AUTH_SECRET=
+  BETTER_AUTH_URL=http://localhost:3000
 
-    DATABASE_CONNECTION_STRING=postgresql://username:YOUR_PASSWORD@host:port/dbname
+  DATABASE_CONNECTION_STRING=postgresql://username:YOUR_PASSWORD@host:port/dbname
 
-    RESEND_API_KEY=
-    EMAIL_VERIFICATION_CALLBACK_URL=http://localhost:3000/email-verified
+  RESEND_API_KEY=
+  EMAIL_VERIFICATION_CALLBACK_URL=http://localhost:3000/email-verified
 
-    GOOGLE_CLIENT_ID=
-    GOOGLE_CLIENT_SECRET=
+  GOOGLE_CLIENT_ID=
+  GOOGLE_CLIENT_SECRET=
 
-    GITHUB_CLIENT_ID=
-    GITHUB_CLIENT_SECRET=
+  GITHUB_CLIENT_ID=
+  GITHUB_CLIENT_SECRET=
 
-    NEXT_PUBLIC_APP_URL=http://localhost:3000
+  NEXT_PUBLIC_APP_URL=http://localhost:3000
 ```
 
 6. Run database migrations
 
 ```bash
-    pnpm db:generate
-    pnpm db:migrate
+  pnpm db:generate
+   pnpm db:migrate
 ```
 
 7. Start the server
