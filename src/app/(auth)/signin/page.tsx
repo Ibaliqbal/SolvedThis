@@ -9,8 +9,7 @@ import { Metadata } from "next";
 import Link from "next/link";
 import React from "react";
 import FormSignin from "../_components/form-signin";
-import LoginGoogle from "../_components/login-google";
-import LoginGithub from "../_components/login-github";
+
 import FormAuthLayout from "@/layouts/form-auth-layout";
 
 export const metadata: Metadata = {
@@ -33,21 +32,7 @@ const Page = () => {
           <CardTitle className="text-2xl font-bold">Welcome back</CardTitle>
           <CardDescription>Sign in to your account to continue</CardDescription>
         </CardHeader>
-        <CardContent className="space-y-4">
-          <div className="grid grid-cols-2 gap-4">
-            <LoginGoogle />
-            <LoginGithub />
-          </div>
-          <div className="relative">
-            <div className="absolute inset-0 flex items-center">
-              <span className="w-full border-t" />
-            </div>
-            <div className="relative flex justify-center text-xs uppercase">
-              <span className="bg-background px-2 text-muted-foreground">
-                Or continue with
-              </span>
-            </div>
-          </div>
+        <CardContent>
           <FormSignin />
         </CardContent>
         <CardFooter className="flex flex-col space-y-2">

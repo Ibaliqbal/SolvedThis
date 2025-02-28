@@ -157,3 +157,14 @@ body {
 .prose ifrmae {
   @apply aspect-video w-full;
 }
+
+.tiptap *,
+.tiptap *:focus,
+.tiptap *:focus-visible,
+.ProseMirror,
+.ProseMirror:focus,
+.ProseMirror-focused {
+  outline: none !important;
+  border-color: inherit !important;
+  box-shadow: none !important;
+}

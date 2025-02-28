@@ -11,13 +11,19 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
   const getThreads = async () => {
     try {
-      return await db.query.ThreadsTable.findMany({
-        columns: {
-          id: true,
-        },
-        orderBy: ({ createdAt }, { desc }) => [desc(createdAt)],
-        limit: 50000, // Limit's google url
-      });
+      return await db
+        .select({
+          id: ThreadsTable.id,
+        })
+        .from(ThreadsTable)
+        .leftJoin(CommentsTable, eq(CommentsTable.threadId, ThreadsTable.id))
+        .groupBy(ThreadsTable.id)
+        .orderBy(
+          desc(
+            sql<number>`COUNT(DISTINCT ${CommentsTable.id}) + COUNT(DISTINCT ${ThreadsTable.likes})`
+          )
+        )
+        .limit(50000);
     } catch (error) {
       return [];
     }

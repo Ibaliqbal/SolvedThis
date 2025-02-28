@@ -1,12 +1,17 @@
 "use client";
 import { Button } from "@/components/ui/button";
 import { authClient } from "@/lib/auth-client";
-import { useState } from "react";
+import { Dispatch, SetStateAction } from "react";
 import { useRouter } from "nextjs-toploader/app";
 import toast from "react-hot-toast";
-const LoginGoogle = () => {
+
+type Props = {
+  pending: boolean;
+  setPending: Dispatch<SetStateAction<boolean>>;
+};
+
+const LoginGoogle = ({ pending, setPending }: Props) => {
   const router = useRouter();
-  const [pending, setPending] = useState(false);
 
   return (
     <Button

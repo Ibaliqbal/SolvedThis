@@ -11,7 +11,10 @@ export default async function middleware(req: NextRequest) {
 
     return NextResponse.next();
   } else {
-    if (!session && ["/profile/settings", "/create-thread"].includes(pathname))
+    if (
+      !session &&
+      ["/profile/settings", "/create-thread", "/logout"].includes(pathname)
+    )
       return NextResponse.redirect(new URL("/signin", req.url));
   }
 

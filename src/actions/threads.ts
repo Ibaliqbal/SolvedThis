@@ -176,6 +176,8 @@ export const getRecentsThread = async (
     extras: ({ id }) => ({
       repliesCount: sql`${repliesCount(id)}`.mapWith(Number).as("repliesCount"),
     }),
+    orderBy: ({ createdAt }, { asc }) => [asc(createdAt)],
+    limit: 5,
   });
 
   return threads;

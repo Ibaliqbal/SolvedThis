@@ -1,14 +1,18 @@
 "use client";
 import { Button } from "@/components/ui/button";
 import { Github } from "lucide-react";
-import { useState } from "react";
+import { Dispatch, SetStateAction } from "react";
 import { useRouter } from "nextjs-toploader/app";
 import { authClient } from "@/lib/auth-client";
 import { toast } from "react-hot-toast";
 
-const LoginGithub = () => {
+type Props = {
+  pending: boolean;
+  setPending: Dispatch<SetStateAction<boolean>>;
+};
+
+const LoginGithub = ({ pending, setPending }: Props) => {
   const router = useRouter();
-  const [pending, setPending] = useState(false);
 
   return (
     <Button

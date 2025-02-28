@@ -1,6 +1,4 @@
-"use client";
-
-import { Loader2, LogOut, User } from "lucide-react";
+import { LogOut, User } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -12,17 +10,12 @@ import {
 } from "./ui/dropdown-menu";
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 import Link from "next/link";
-import { authClient } from "@/lib/auth-client";
-import { useRouter } from "next/navigation";
-import { useState } from "react";
 
 type Props = {
   image: string | null | undefined;
 };
 
 const ProfileDropdown = ({ image }: Props) => {
-  const router = useRouter();
-  const [pending, setPending] = useState(false);
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -37,30 +30,17 @@ const ProfileDropdown = ({ image }: Props) => {
         <DropdownMenuLabel>My Account</DropdownMenuLabel>
         <DropdownMenuSeparator />
         <DropdownMenuGroup className="space-y-2">
-          <DropdownMenuItem asChild>
+          <DropdownMenuItem asChild className="cursor-pointer">
             <Link href={"/profile/settings"}>
               <User />
               Profile
             </Link>
           </DropdownMenuItem>
-          <DropdownMenuItem
-            disabled={pending}
-            onClick={async () => {
-              await authClient.signOut({
-                fetchOptions: {
-                  onSuccess: () => {
-                    router.refresh();
-                  },
-                  onRequest: () => {
-                    setPending(true);
-                  },
-                },
-              });
-              setPending(false);
-            }}
-          >
-            {pending ? <Loader2 className="animate-spin" /> : <LogOut />}
-            Logout
+          <DropdownMenuItem asChild className="cursor-pointer">
+            <Link href="/logout">
+              <LogOut />
+              Logout
+            </Link>
           </DropdownMenuItem>
         </DropdownMenuGroup>
       </DropdownMenuContent>

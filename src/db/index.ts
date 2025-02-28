@@ -14,6 +14,7 @@ const connectionPool = postgres(process.env.DATABASE_CONNECTION_STRING!, {
   max: 20, // Reduced to a more reasonable number
   idle_timeout: 30,
   max_lifetime: 60 * 30, // 30 minutes
+  // ssl: "require",
 });
 
 function createDb() {

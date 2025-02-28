@@ -38,10 +38,7 @@ const Page = () => {
         <CardFooter>
           <p className="text-sm text-center text-gray-600 dark:text-gray-400 w-full">
             Already have an account?{" "}
-            <Link
-              href="/signin"
-              className="text-blue-600 hover:underline dark:text-blue-400"
-            >
+            <Link href="/signin" className="text-primary hover:underline">
               Sign in
             </Link>
           </p>

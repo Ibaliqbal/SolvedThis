@@ -49,7 +49,7 @@ export default function Home() {
       </section>
 
       <section
-        className="animate-fade-up delay-[400ms] duration-700"
+        className="animate-fade-up delay-500 duration-700"
         style={{
           animationFillMode: "both",
         }}

@@ -7,6 +7,8 @@ import FontFamily from "@tiptap/extension-font-family";
 import TextAlign from "@tiptap/extension-text-align";
 import CharacterCount from "@tiptap/extension-character-count";
 import TipTapYoutube from "@tiptap/extension-youtube";
+import Image from "@tiptap/extension-image";
+import Dropcursor from "@tiptap/extension-dropcursor";
 import { Button } from "@/components/ui/button";
 import {
   Bold,
@@ -21,10 +23,11 @@ import {
   Redo,
   AlignJustify,
   Youtube,
+  ImagePlus,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { limitContent } from "@/config/thread";
-import { useRef, useState, useEffect } from "react";
+import { useRef, useState, useEffect, useCallback } from "react";
 import {
   Dialog,
   DialogClose,
@@ -69,6 +72,8 @@ export default function TextEditor({
           class: "w-full aspect-ratio my-4",
         },
       }),
+      Image,
+      Dropcursor,
     ],
     content,
     onUpdate: ({ editor }) => {
@@ -97,7 +102,7 @@ export default function TextEditor({
         <div className="max-h-full p-4 overflow-auto">
           <EditorContent
             editor={editor}
-            className="prose dark:prose-invert bg-background p-2 outline-none"
+            className="prose dark:prose-invert bg-background p-2"
           />
         </div>
       </div>
@@ -113,7 +118,8 @@ export default function TextEditor({
 
 function MenuBar({ editor }: { editor: Editor | null }) {
   const [chanceEmbedYt, setChanceEmbedYt] = useState(1);
-  const urlRef = useRef<HTMLInputElement | null>(null);
+  const urlRefYoutube = useRef<HTMLInputElement | null>(null);
+  const urlRefImage = useRef<HTMLInputElement | null>(null);
 
   useEffect(() => {
     if (!editor) return;
@@ -136,14 +142,31 @@ function MenuBar({ editor }: { editor: Editor | null }) {
     };
   }, [editor]);
 
+  const addImage = useCallback(() => {
+    if (urlRefImage.current) {
+      if (!urlRefImage.current.value || urlRefImage.current.value.trim() === "")
+        return;
+      setChanceEmbedYt(0);
+      editor
+        ?.chain()
+        .focus()
+        .setImage({ src: urlRefImage.current.value })
+        .run();
+    }
+  }, [editor]);
+
   if (!editor) return null;
 
   function addYoutube() {
-    if (urlRef.current) {
-      if (!urlRef.current.value || urlRef.current.value.trim() === "") return;
+    if (urlRefYoutube.current) {
+      if (
+        !urlRefYoutube.current.value ||
+        urlRefYoutube.current.value.trim() === ""
+      )
+        return;
       setChanceEmbedYt(0);
       editor?.commands.setYoutubeVideo({
-        src: urlRef.current.value,
+        src: urlRefYoutube.current.value,
       });
     }
   }
@@ -294,7 +317,7 @@ function MenuBar({ editor }: { editor: Editor | null }) {
                 Link
               </Label>
               <Input
-                ref={urlRef}
+                ref={urlRefYoutube}
                 id="link"
                 placeholder="https://youtu.be/xkSV5hrIBEg?si=CP0xa8zKpuX1Z1dO"
               />
@@ -303,6 +326,47 @@ function MenuBar({ editor }: { editor: Editor | null }) {
           <DialogFooter className="sm:justify-start">
             <DialogClose asChild>
               <Button type="button" variant="secondary" onClick={addYoutube}>
+                Apply
+              </Button>
+            </DialogClose>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+      <Dialog>
+        <DialogTrigger asChild>
+          <Button
+            type="button"
+            variant="ghost"
+            size="sm"
+            disabled={chanceEmbedYt <= 0}
+            className="disabled:cursor-none"
+          >
+            <ImagePlus className="h-4 w-4" />
+          </Button>
+        </DialogTrigger>
+        <DialogContent className="sm:max-w-md">
+          <DialogHeader>
+            <DialogTitle>Share Image</DialogTitle>
+            <DialogDescription>
+              You can share an image by entering a link or uploading an image
+              file.
+            </DialogDescription>
+          </DialogHeader>
+          <div className="flex items-center space-x-2">
+            <div className="grid flex-1 gap-2">
+              <Label htmlFor="link" className="sr-only">
+                Link
+              </Label>
+              <Input
+                ref={urlRefImage}
+                id="link"
+                placeholder="Enter the image URL here..."
+              />
+            </div>
+          </div>
+          <DialogFooter className="sm:justify-start">
+            <DialogClose asChild>
+              <Button type="button" variant="secondary" onClick={addImage}>
                 Apply
               </Button>
             </DialogClose>
