@@ -17,8 +17,11 @@ import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
 import { Loader2, Mail } from "lucide-react";
 import { useState } from "react";
-import LoginGoogle from "../_components/login-google";
-import LoginGithub from "../_components/login-github";
+import {
+  LoginGoogle,
+  LoginDiscord,
+  LoginGithub,
+} from "../_components/social-login";
 
 const FormSignin = () => {
   const router = useRouter();
@@ -58,9 +61,12 @@ const FormSignin = () => {
 
   return (
     <section className="space-y-4">
-      <div className="grid grid-cols-2 gap-4">
+      <div className="grid md:grid-cols-2 gap-4">
         <LoginGoogle pending={pending} setPending={setPending} />
         <LoginGithub pending={pending} setPending={setPending} />
+        <div className="col-span-2">
+          <LoginDiscord pending={pending} setPending={setPending} />
+        </div>
       </div>
       <div className="relative">
         <div className="absolute inset-0 flex items-center">

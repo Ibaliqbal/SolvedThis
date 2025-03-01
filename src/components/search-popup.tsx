@@ -103,14 +103,14 @@ const SearchPopup = () => {
               ))
             : null}
           {result && result.length > 0 && !loading && (
-            <CommandGroup heading="Suggestions" className="mb-2">
+            <CommandGroup heading="Suggestions" className="mb-2 space-y-2">
               {result.map((thread) => (
                 <CommandItem
                   key={thread.id}
                   className="h-9 cursor-pointer"
                   onSelect={() => {
                     router.push(`/threads/${thread.id}`);
-                    setOpen(false)
+                    setOpen(false);
                   }}
                 >
                   {thread.title}

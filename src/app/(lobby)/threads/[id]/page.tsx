@@ -44,7 +44,7 @@ export default async function ThreadPage({
     <section className="space-y-6">
       <div className="space-y-3">
         <Card>
-          <CardHeader>
+          <CardHeader className="space-y-4">
             <CardTitle>{data.thread.title}</CardTitle>
             <div className="flex items-center space-x-2 text-sm text-muted-foreground">
               <Avatar className="h-6 w-6">

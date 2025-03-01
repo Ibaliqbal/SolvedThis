@@ -9,10 +9,21 @@ export default function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
           <div>
             <h3 className="text-lg font-semibold mb-4">About SolvedThis</h3>
-            <p className="text-sm text-muted-foreground mb-3">
+            <p className="text-sm text-muted-foreground mb-1">
               SolvedThis is a vibrant community where ideas flourish and
               conversations thrive. Join us in shaping the future of online
               discussions.
+            </p>
+            <p className="text-muted-foreground text-xs mb-2">
+              Developer :{" "}
+              <a
+                href="https://instagram.com/muthahhary_iqbal"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="hover:underline"
+              >
+                Iqbal Muthahahry
+              </a>
             </p>
             <ThemeToggle align="start" />
           </div>

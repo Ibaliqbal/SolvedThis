@@ -1,4 +1,5 @@
 "use server";
+import { headers } from "next/headers";
 import { count, eq, sql } from "drizzle-orm";
 import { getSession } from "./session";
 import { db } from "@/db";
@@ -8,8 +9,9 @@ import { calculateUserLevel } from "@/utils/helper";
 import { utApi } from "@/lib/uploadthing";
 import { revalidatePath } from "next/cache";
 import { UploadFileResult } from "uploadthing/types";
-import { headers } from "next/headers";
 import { rateLimit } from "@/lib/rateLimit";
+import { auth } from "@/auth";
+import { setPasswordSchema } from "@/types/user";
 
 const threadsCount = (userId: AnyPgColumn) =>
   db
@@ -201,4 +203,61 @@ export const likeToggleThreads = async (isLikeIt: boolean, id: string) => {
       status: false,
     };
   }
+};
+
+export const getInfoAccountConnected = async () => {
+  const session = await getSession();
+
+  if (!session) return undefined;
+
+  const accounts = await db.query.UsersTable.findFirst({
+    where: eq(UsersTable.id, session.user.id),
+    columns: {
+      id: true,
+    },
+    with: {
+      accounts: {
+        columns: {
+          providerId: true,
+        },
+      },
+    },
+  });
+
+  return accounts;
+};
+
+export const connectAcountToEmailandPassword = async (form: {
+  password: string;
+}) => {
+  const session = await getSession();
+  if (!session)
+    return {
+      message: "Access denied",
+      status: false,
+    };
+
+  const { data, error } = setPasswordSchema.safeParse(form);
+
+  if (error)
+    return {
+      message: error.message,
+      status: false,
+    };
+
+  const res = await auth.api.setPassword({
+    headers: await headers(),
+    body: { newPassword: data.password },
+  });
+
+  if (!res.status)
+    return {
+      message: "Something went wrong...",
+      status: res.status,
+    };
+
+  return {
+    message: "Success",
+    status: res.status,
+  };
 };

@@ -66,11 +66,12 @@ export default function TextEditor({
         limit: limitContent,
       }),
       TipTapYoutube.configure({
-        controls: false,
         nocookie: true,
+        loop: true,
         HTMLAttributes: {
           class: "w-full aspect-ratio my-4",
         },
+        progressBarColor: "white",
       }),
       Image,
       Dropcursor,
@@ -173,26 +174,6 @@ function MenuBar({ editor }: { editor: Editor | null }) {
 
   return (
     <div className="bg-muted p-2 flex flex-wrap gap-2 sticky top-0 z-[1]">
-      <Button
-        type="button"
-        variant="ghost"
-        size="sm"
-        onClick={() => editor.chain().focus().undo().run()}
-        disabled={!editor.can().undo()}
-        className={editor.isActive("bold") ? "bg-muted-foreground/20" : ""}
-      >
-        <Undo className="h-4 w-4" />
-      </Button>
-      <Button
-        type="button"
-        variant="ghost"
-        size="sm"
-        onClick={() => editor.chain().focus().redo().run()}
-        disabled={!editor.can().redo()}
-        className={editor.isActive("bold") ? "bg-muted-foreground/20" : ""}
-      >
-        <Redo className="h-4 w-4" />
-      </Button>
       <Button
         type="button"
         variant="ghost"
@@ -373,6 +354,26 @@ function MenuBar({ editor }: { editor: Editor | null }) {
           </DialogFooter>
         </DialogContent>
       </Dialog>
+      <Button
+        type="button"
+        variant="ghost"
+        size="sm"
+        onClick={() => editor.chain().focus().undo().run()}
+        disabled={!editor.can().undo()}
+        className={editor.isActive("bold") ? "bg-muted-foreground/20" : ""}
+      >
+        <Undo className="h-4 w-4" />
+      </Button>
+      <Button
+        type="button"
+        variant="ghost"
+        size="sm"
+        onClick={() => editor.chain().focus().redo().run()}
+        disabled={!editor.can().redo()}
+        className={editor.isActive("bold") ? "bg-muted-foreground/20" : ""}
+      >
+        <Redo className="h-4 w-4" />
+      </Button>
     </div>
   );
 }

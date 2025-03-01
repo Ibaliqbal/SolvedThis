@@ -28,10 +28,6 @@ SolvedThis is a modern discussion platform that empowers communities to engage i
 - **OAuth Integration:** Multiple sign-in options for user convenience
 - **Account Management:** Update profile information and security settings
 
-### Upcoming Features
-
-- **Report System:** Community moderation through content reporting
-
 ## 🛠 Techstack
 
 - **Nextjs:** React framework for production
@@ -88,6 +84,9 @@ SolvedThis is a modern discussion platform that empowers communities to engage i
   GITHUB_CLIENT_ID=
   GITHUB_CLIENT_SECRET=
 
+  DISCORD_CLIENT_ID=
+  DISCORD_CLIENT_SECRET=
+
   NEXT_PUBLIC_APP_URL=http://localhost:3000
 ```
 
@@ -95,7 +94,7 @@ SolvedThis is a modern discussion platform that empowers communities to engage i
 
 ```bash
   pnpm db:generate
-   pnpm db:migrate
+  pnpm db:migrate
 ```
 
 7. Start the server
@@ -104,6 +103,10 @@ SolvedThis is a modern discussion platform that empowers communities to engage i
   pnpm dev
 ```
 
+## Feedback
+
+If you have any feedback or inspiration for some feature, please reach out to us at issues.Your feedback makes us continue to grow
+
 ## Usage
 
 After logging in, users can:
@@ -111,8 +114,6 @@ After logging in, users can:
 - Create new discussion threads
 - Engage with existing content through likes and replies
 - Use the rich text editor for creating content
-
-## Footer
 
 SolvedThis - Fostering Meaningful Discussions
 

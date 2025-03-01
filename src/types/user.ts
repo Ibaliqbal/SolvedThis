@@ -68,3 +68,21 @@ export const resetPasswordSchema = z
   });
 
 export type ResetPasswordSchemaT = z.infer<typeof resetPasswordSchema>;
+
+export const setPasswordSchema = z.object({
+  password: z
+    .string()
+    .min(8, { message: "Password minimun 8 char" })
+    .max(20, { message: "Password miximum 20 char" })
+    // .refine((val) => /[A-Z]/.test(val), {
+    //   message: "Password must contain at least one uppercase letter",
+    // })
+    // .refine((val) => /[0-9]/.test(val), {
+    //   message: "Password must contain at least one number",
+    // })
+    // .refine((val) => /[!@#$%^&*(),.?":{}|<>]/.test(val), {
+    //   message: "Password must contain at least one special character",
+    // }),
+});
+
+export type SetPasswordSchemaT = z.infer<typeof setPasswordSchema>;

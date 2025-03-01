@@ -155,7 +155,7 @@ body {
 }
 
 .prose ifrmae {
-  @apply aspect-video w-full;
+  @apply md:aspect-video aspect-square w-full;
 }
 
 .tiptap *,

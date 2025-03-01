@@ -9,6 +9,24 @@ import {
   RecentThreadsLoading,
 } from "../_components/recent-threads";
 import { cn } from "@/lib/utils";
+import { Metadata } from "next";
+
+export const generateMetadata = ({
+  params,
+}: {
+  params: { username: string };
+}): Metadata => {
+  const username = decodeURIComponent(params.username);
+  return {
+    title: `${username} | SolvedThis`,
+    description: `Check out ${username}'s profile and recent discussions`,
+    openGraph: {
+      title: `${username} | SolvedThis`,
+      description: `Check out ${username}'s profile and recent discussions`,
+      url: `${process.env.NEXT_PUBLIC_APP_URL}/profile/${username}`,
+    },
+  };
+};
 
 export default async function UserProfilePage({
   params,
