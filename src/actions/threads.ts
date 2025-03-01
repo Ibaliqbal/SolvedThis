@@ -286,3 +286,33 @@ export const getThreadSearch = async (
 
   return threads;
 };
+
+export const getLikedThreads = async (): Promise<Array<ThreadResponse>> => {
+  const session = await getSession();
+
+  if (!session) return [];
+
+  const threads = await db.query.ThreadsTable.findMany({
+    where: ({ id }, { inArray }) =>
+      inArray(id, (session.user.likesThread as string[]) ?? []),
+    with: {
+      user: {
+        columns: {
+          image: true,
+          name: true,
+        },
+      },
+    },
+    columns: {
+      id: true,
+      title: true,
+      likes: true,
+    },
+    extras: ({ id }) => ({
+      repliesCount: sql`${repliesCount(id)}`.mapWith(Number).as("repliesCount"),
+    }),
+    limit: 10,
+  });
+
+  return threads;
+};

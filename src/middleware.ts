@@ -13,7 +13,12 @@ export default async function middleware(req: NextRequest) {
   } else {
     if (
       !session &&
-      ["/profile/settings", "/create-thread", "/logout"].includes(pathname)
+      [
+        "/profile/settings",
+        "/create-thread",
+        "/logout",
+        "/profile/liked-threads",
+      ].includes(pathname)
     )
       return NextResponse.redirect(new URL("/signin", req.url));
   }

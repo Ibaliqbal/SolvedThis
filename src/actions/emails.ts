@@ -5,6 +5,7 @@ import Verification from "@/emails/Verification";
 import ResetPassword from "@/emails/ResetPassword";
 
 const resendApiKey = process.env.RESEND_API_KEY;
+const emailFrom = process.env.EMAIL_FROM!;
 
 export async function sendVerification({
   to,
@@ -20,7 +21,7 @@ export async function sendVerification({
   const resend = new Resend(process.env.RESEND_API_KEY);
 
   const options = {
-    from: "onboarding@resend.dev",
+    from: emailFrom,
     to,
     subject: "Welcome to SolvedThis",
     react: Verification({ username: name, verificationLink: url }),
@@ -53,7 +54,7 @@ export async function sendResetPassword({
   const resend = new Resend(process.env.RESEND_API_KEY);
 
   const options = {
-    from: "onboarding@resend.dev",
+    from: emailFrom,
     to,
     subject: "Reset Your SolvedThis Password",
     react: ResetPassword({ resetPasswordLink: url }),
@@ -65,7 +66,7 @@ export async function sendResetPassword({
     return {
       success: true,
     };
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
   } catch (error) {
     return {
       success: false,

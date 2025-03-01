@@ -104,6 +104,8 @@ export const getUserProfile = async (name: string) => {
 
 export const updateProfile = async (form: FormData) => {
   const session = await getSession();
+  const ip = headers().get("x-forwarded-for") ?? "unknown";
+  const isRateLimited = rateLimit(ip, 7, 1);
 
   if (!session)
     return {
@@ -111,9 +113,26 @@ export const updateProfile = async (form: FormData) => {
       status: false,
     };
 
+  if (isRateLimited)
+    return {
+      message:
+        "You have exceeded the maximum number of requests. Please try again later.",
+      status: false,
+    };
+
   const avatar = form.get("file");
   const name = form.get("name") as string;
   const bio = form.get("bio") as string;
+
+  const availableUsername = await db.query.UsersTable.findFirst({
+    where: eq(UsersTable.name, name),
+  });
+
+  if (availableUsername)
+    return {
+      message: "Username already exists",
+      status: false,
+    };
 
   let responseUploadthing: UploadFileResult | undefined;
 

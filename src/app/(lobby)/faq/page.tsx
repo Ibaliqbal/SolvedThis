@@ -37,9 +37,9 @@ const faqs = [
       "If you come across any content that violates our community guidelines, please use the 'Report' button next to the post or comment. Our moderation team will review the report and take appropriate action.",
   },
   {
-    question: "Can I change my username?",
+    question: "Can I change my profile?",
     answer:
-      "Yes, you can change your username once every 30 days. Go to your account settings and look for the 'Change Username' option. Keep in mind that your old username will be available for others to use after you change it.",
+      "Yes, you can change your username once every a week. Go to your account settings and look for the 'Edit Profile' option. Keep in mind that your old username will be available for others to use after you change it.",
   },
   {
     question: "How do I create a new thread?",

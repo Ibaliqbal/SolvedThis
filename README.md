@@ -9,9 +9,9 @@ SolvedThis is a modern discussion platform that empowers communities to engage i
 ### Interactive Discussions
 
 - **Create Threads:** Users can easily create new discussion threads with rich text formatting and multimedia support
-- **Engage with Content:** Like, save, and share interesting discussions with the community
+- **Engage with Content:** Like and share interesting discussions with the community
 - **Reply System:** Participate in conversations through threaded replies and nested discussions
-- **Rich Text Editor:** Customize content with a powerful editor supporting markdown, images, and code snippets
+- **Rich Text Editor:** Customize content with a powerful editor supporting markdown, images, and embedded youtube
 
 ### User Experience
 
@@ -77,6 +77,7 @@ SolvedThis is a modern discussion platform that empowers communities to engage i
 
   RESEND_API_KEY=
   EMAIL_VERIFICATION_CALLBACK_URL=http://localhost:3000/email-verified
+  EMAIL_FROM=
 
   GOOGLE_CLIENT_ID=
   GOOGLE_CLIENT_SECRET=
