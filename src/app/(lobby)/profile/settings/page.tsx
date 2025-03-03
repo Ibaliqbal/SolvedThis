@@ -52,7 +52,12 @@ export default async function UserProfileSettingsPage() {
         <ConnectedAccounts />
       </Suspense>
 
-      <h2 className="text-2xl font-bold mt-8 mb-4">Recent Threads</h2>
+      <div className="flex justify-between items-center mt-8 mb-4">
+        <h2 className="text-2xl font-bold">Recent Threads</h2>
+        <Button variant="link">
+          <Link href={"/profile/my-threads"}>View all</Link>
+        </Button>
+      </div>
       <Suspense fallback={<RecentThreadsLoading />}>
         <RecentThreads name={session?.user.id as string} />
       </Suspense>
