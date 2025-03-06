@@ -105,7 +105,7 @@ export const getUserProfile = async (name: string) => {
 export const updateProfile = async (form: FormData) => {
   const session = await getSession();
   const ip = headers().get("x-forwarded-for") ?? "unknown";
-  const isRateLimited = rateLimit(ip, 7, 1);
+  const isRateLimited = rateLimit(ip, 7, 3);
 
   if (!session)
     return {
@@ -128,7 +128,7 @@ export const updateProfile = async (form: FormData) => {
     where: eq(UsersTable.name, name),
   });
 
-  if (availableUsername)
+  if (availableUsername && availableUsername.id !== session.user.id)
     return {
       message: "Username already exists",
       status: false,
