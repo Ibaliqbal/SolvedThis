@@ -5,7 +5,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Mail, MessageCircle } from "lucide-react";
 import { Metadata } from "next";
 
-export const metadat: Metadata = {
+export const metadata: Metadata = {
   title: "Support | SolvedThis",
   description:
     "Get help with your questions or concerns. Visit our support page for immediate assistance.",
