@@ -9,7 +9,7 @@ const Loading = () => {
       <h2 className="text-2xl font-bold mt-8 mb-4">Comments</h2>
       <div className="space-y-4">
         {Array.from({ length: 4 }).map((_, i) => (
-          <ReplySkeleton key={i} className="w-full h-[120px]" />
+          <ReplySkeleton key={i} />
         ))}
       </div>
 
