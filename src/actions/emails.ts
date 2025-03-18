@@ -5,7 +5,7 @@ import Verification from "@/emails/Verification";
 import ResetPassword from "@/emails/ResetPassword";
 
 const resendApiKey = process.env.RESEND_API_KEY;
-const emailFrom = process.env.EMAIL_FROM!;
+const emailFrom = process.env.EMAIL_FROM! ?? "";
 
 export async function sendVerification({
   to,

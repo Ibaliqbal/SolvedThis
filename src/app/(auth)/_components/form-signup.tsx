@@ -43,9 +43,10 @@ const FormSignUp = () => {
           setPending(true);
         },
         onSuccess: () => {
-          toast.success(
-            "Your account has been created. Check your email for a verification link."
-          );
+          toast.success("Your account has been created. You can login now...");
+          // toast.success(
+          //   "Your account has been created. Check your email for a verification link."
+          // );
         },
         onError: (ctx) => {
           toast.error(ctx.error.message ?? "Internal server error");

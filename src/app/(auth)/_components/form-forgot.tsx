@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import toast from "react-hot-toast";
-import { authClient } from "@/lib/auth-client";
+// import { authClient } from "@/lib/auth-client";
 import { Mail, Loader2 } from "lucide-react";
 
 const FormForgot = () => {
@@ -22,18 +22,20 @@ const FormForgot = () => {
 
     setPending(true);
     // Here you would typically call an API to send the reset email\
-    const { error } = await authClient.forgetPassword({
-      email: emailForm,
-      redirectTo: "/reset-password",
-    });
 
-    if (error) {
-      toast.error(error.message ?? "Failed to reset password");
-    } else {
-      toast.success(
-        "If an account exists for this email, you will receive password reset instructions."
-      );
-    }
+    toast.error("Incomming  feature...");
+    // const { error } = await authClient.forgetPassword({
+    //   email: emailForm,
+    //   redirectTo: "/reset-password",
+    // });
+
+    // if (error) {
+    //   toast.error(error.message ?? "Failed to reset password");
+    // } else {
+    //   toast.success(
+    //     "If an account exists for this email, you will receive password reset instructions."
+    //   );
+    // }
     setPending(false);
   };
   return (
