@@ -54,6 +54,7 @@ const FormSignUp = () => {
       }
     );
     setPending(false);
+    form.reset();
   };
 
   return (

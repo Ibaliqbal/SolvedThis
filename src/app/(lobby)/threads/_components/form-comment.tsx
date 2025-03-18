@@ -13,6 +13,7 @@ import {
 import { replyThreadSchema, ReplyThreadSchemaT } from "@/types/thread";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Loader2 } from "lucide-react";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
@@ -26,6 +27,7 @@ const FormComment = ({ id }: Props) => {
     defaultValues: { content: "" },
   });
   const [key, setKey] = useState(0);
+  const router = useRouter();
 
   async function handleSubmit(data: ReplyThreadSchemaT) {
     const res = await createReply(data, id);
@@ -37,6 +39,8 @@ const FormComment = ({ id }: Props) => {
       form.reset({ content: "<p></p>" });
       setKey((prev) => prev + 1);
     }
+
+    router.refresh();
   }
 
   return (

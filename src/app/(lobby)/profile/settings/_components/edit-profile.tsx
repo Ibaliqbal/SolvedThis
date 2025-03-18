@@ -20,6 +20,7 @@ import { updateProfile } from "@/actions/user";
 import toast from "react-hot-toast";
 import { Loader2 } from "lucide-react";
 import { Textarea } from "@/components/ui/textarea";
+import { useRouter } from "next/navigation";
 
 type Props = {
   name: string;
@@ -33,6 +34,7 @@ export function EditProfile({ name, image, bio }: Props) {
   const [userBio, setUserBio] = useState(bio);
   const [avatarFile, setAvatarFile] = useState<File | null>(null);
   const [loading, setLoading] = useState(false);
+  const router = useRouter();
 
   const handleAvatarChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -67,6 +69,7 @@ export function EditProfile({ name, image, bio }: Props) {
       toast.error(res.message);
     }
     setLoading(false);
+    router.refresh();
   }
 
   return (

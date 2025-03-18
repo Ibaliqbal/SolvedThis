@@ -7,7 +7,6 @@ import { CommentsTable, ThreadsTable, UsersTable } from "@/db/schema";
 import { AnyPgColumn } from "drizzle-orm/pg-core";
 import { calculateUserLevel } from "@/utils/helper";
 import { utApi } from "@/lib/uploadthing";
-import { revalidatePath } from "next/cache";
 import { UploadFileResult } from "uploadthing/types";
 import { rateLimit } from "@/lib/rateLimit";
 import { auth } from "@/auth";
@@ -162,8 +161,6 @@ export const updateProfile = async (form: FormData) => {
       bio,
     })
     .where(eq(UsersTable.id, session.user.id));
-
-  revalidatePath("/profile/settings");
 
   return {
     message: "Success",

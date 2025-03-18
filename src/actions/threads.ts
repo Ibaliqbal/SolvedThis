@@ -2,7 +2,7 @@
 
 import { CreatedThreadSchemaT, ReplyThreadSchemaT } from "../types/thread";
 import { db } from "@/db";
-import { revalidatePath, unstable_noStore as noStore } from "next/cache";
+import { unstable_noStore as noStore } from "next/cache";
 import { count, eq, sql } from "drizzle-orm";
 import { AnyPgColumn } from "drizzle-orm/pg-core";
 import { getSession } from "./session";
@@ -119,8 +119,6 @@ export const createReply = async (
       })
       .where(eq(UsersTable.id, session.user.id));
   });
-
-  revalidatePath(`/threads/${id}`);
 
   return {
     message: "Succes create reply",
