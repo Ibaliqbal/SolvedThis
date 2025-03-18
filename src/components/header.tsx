@@ -14,7 +14,7 @@ type Props = {
 export default function Header({ session }: Props) {
   return (
     <header className="border-b sticky top-0 z-10 bg-background">
-      <div className="container mx-auto px-4 py-4 flex justify-between items-center">
+      <div className="container py-4 flex justify-between items-center">
         <div className="flex items-center gap-3">
           <MobileNav />
           <Link

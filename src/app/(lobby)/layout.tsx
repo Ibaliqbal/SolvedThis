@@ -10,7 +10,7 @@ const Layout = async ({ children }: { children: ReactNode }) => {
     <main className="min-h-screen flex flex-col">
       <Header session={session} />
       <main className="flex-grow">
-        <section className="container px-4 py-8">{children}</section>
+        <section className="container py-8">{children}</section>
       </main>
       <Footer />
     </main>

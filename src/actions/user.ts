@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 "use server";
 import { headers } from "next/headers";
 import { count, eq, sql } from "drizzle-orm";
@@ -213,7 +214,6 @@ export const likeToggleThreads = async (isLikeIt: boolean, id: string) => {
       status: true,
     };
   } catch (error) {
-    console.log(error);
     return {
       message: "Failed to like",
       status: false,

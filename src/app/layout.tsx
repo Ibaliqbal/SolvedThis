@@ -15,6 +15,7 @@ export const metadata: Metadata = {
     type: "website",
     siteName: "SolvedThis",
     url: new URL(process.env.NEXT_PUBLIC_APP_URL!),
+    images: ["/home.png"],
   },
   icons: {
     icon: "/favicon.ico",

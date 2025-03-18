@@ -103,7 +103,10 @@ const SearchPopup = () => {
               ))
             : null}
           {result && result.length > 0 && !loading && (
-            <CommandGroup heading="Suggestions" className="mb-2 space-y-2">
+            <CommandGroup
+              heading="Suggestions"
+              className="mb-2 md:space-y-2 space-y-4"
+            >
               {result.map((thread) => (
                 <CommandItem
                   key={thread.id}

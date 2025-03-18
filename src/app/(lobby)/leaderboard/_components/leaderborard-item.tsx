@@ -2,6 +2,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Trophy, Medal, Award } from "lucide-react";
 import Link from "next/link";
+import { cn } from "@/lib/utils";
 
 const LeaderboardItem = ({
   user,
@@ -19,14 +20,14 @@ const LeaderboardItem = ({
   const getRankIcon = (rank: number) => {
     switch (rank) {
       case 1:
-        return <Trophy className="h-6 w-6 text-yellow-400" />;
+        return <Trophy className="h-5 w-5 sm:h-6 sm:w-6 text-yellow-400" />;
       case 2:
-        return <Medal className="h-6 w-6 text-gray-400" />;
+        return <Medal className="h-5 w-5 sm:h-6 sm:w-6 text-gray-400" />;
       case 3:
-        return <Award className="h-6 w-6 text-amber-600" />;
+        return <Award className="h-5 w-5 sm:h-6 sm:w-6 text-amber-600" />;
       default:
         return (
-          <span className="text-lg font-bold text-muted-foreground">
+          <span className="text-base sm:text-lg font-bold text-muted-foreground">
             {rank}
           </span>
         );
@@ -36,18 +37,34 @@ const LeaderboardItem = ({
   return (
     <Link
       href={`/profile/${encodeURIComponent(user.name)}`}
-      className="flex items-center space-x-4 py-4"
+      className="group flex items-center gap-2 sm:gap-4 py-3 px-2 rounded-lg transition-colors hover:bg-muted/50"
     >
-      <div className="flex-shrink-0 w-8 text-center">{getRankIcon(rank)}</div>
-      <Avatar className="h-10 w-10">
+      <div
+        className={cn(
+          "flex-shrink-0 w-7 sm:w-8 h-7 sm:h-8 flex items-center justify-center rounded-full",
+          rank <= 3 ? "bg-muted/50" : ""
+        )}
+      >
+        {getRankIcon(rank)}
+      </div>
+
+      <Avatar className="h-8 w-8 sm:h-10 sm:w-10 border">
         <AvatarImage src={user.image ?? ""} alt={user.name} />
         <AvatarFallback>{user.name[0]}</AvatarFallback>
       </Avatar>
-      <div className="flex-grow">
-        <p className="font-semibold">{user.name}</p>
-        <p className="text-sm text-muted-foreground">Level {user.level}</p>
+
+      <div className="flex-grow min-w-0">
+        <p className="font-semibold truncate">{user.name}</p>
+        <div className="flex items-center gap-2">
+          <p className="text-xs sm:text-sm text-muted-foreground">
+            Level {user.level}
+          </p>
+        </div>
       </div>
-      <Badge variant="secondary">{user.totalPosts} posts</Badge>
+
+      <Badge variant="secondary" className="ml-auto flex-shrink-0">
+        {user.totalPosts} posts
+      </Badge>
     </Link>
   );
 };

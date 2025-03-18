@@ -5,7 +5,7 @@ import { ThreadsList, ThreadsSkeleton } from "./_components/threads-list";
 
 const MyThreadsPage = () => {
   return (
-    <div className="container mx-auto px-4 py-8">
+    <div className="container py-8">
       <h1 className="text-3xl font-bold flex items-center mb-6">
         <PenSquare className="mr-2 h-8 w-8 text-primary" />
         My Threads

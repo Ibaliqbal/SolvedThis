@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 "use server";
 
 import { Resend } from "resend";
@@ -34,8 +35,6 @@ export async function sendVerification({
       success: true,
     };
   } catch (error) {
-    console.log(error);
-
     return {
       success: false,
     };
@@ -66,7 +65,6 @@ export async function sendResetPassword({
     return {
       success: true,
     };
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
   } catch (error) {
     return {
       success: false,

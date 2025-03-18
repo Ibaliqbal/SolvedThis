@@ -18,7 +18,7 @@ export const metadata: Metadata = {
 
 const LikedThreadsPage = async () => {
   return (
-    <div className="container mx-auto px-4 py-8">
+    <div className="container py-8">
       <h1 className="text-3xl font-bold flex items-center mb-6">
         <Heart className="mr-2 h-8 w-8 text-red-500" />
         Liked Threads

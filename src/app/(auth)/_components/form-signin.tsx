@@ -50,7 +50,6 @@ const FormSignin = () => {
           router.refresh();
         },
         onError: (ctx) => {
-          console.log(ctx.error);
           toast.error(ctx.error.message ?? "Internal server error");
           form.reset();
         },
