@@ -5,7 +5,7 @@ import { ThemeToggle } from "./theme-toggle";
 export default function Footer() {
   return (
     <footer className="border-t">
-      <div className="container mx-auto py-8">
+      <div className="container md:px-7 px-4 mx-auto py-8">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
           <div>
             <h3 className="text-lg font-semibold mb-4">About SolvedThis</h3>
@@ -22,7 +22,7 @@ export default function Footer() {
                 rel="noopener noreferrer"
                 className="hover:underline"
               >
-                Iqbal Muthahahry
+                Iqbal Muthahhary
               </a>
             </p>
             <ThemeToggle align="start" />

@@ -11,10 +11,10 @@ import { Suspense } from "react";
 
 export default function Home() {
   return (
-    <div className="space-y-12">
+    <div className="space-y-12 px-5">
       <section className="text-center py-20 px-4">
         <h1
-          className="text-4xl md:text-6xl font-bold mb-6 animate-fade-up duration-700"
+          className="text-5xl md:text-6xl font-bold mb-6 animate-fade-up duration-700"
           style={{
             animationFillMode: "both",
           }}
@@ -34,7 +34,7 @@ export default function Home() {
           questions, and connecting with others.
         </p>
         <div
-          className="flex justify-center gap-4 animate-fade-up delay-300 duration-700"
+          className="flex md:flex-row flex-col justify-center gap-4 animate-fade-up delay-300 duration-700"
           style={{
             animationFillMode: "both",
           }}

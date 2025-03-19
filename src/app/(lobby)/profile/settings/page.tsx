@@ -30,7 +30,7 @@ export default async function UserProfileSettingsPage() {
 
   return (
     <div className="space-y-6">
-      <div className="flex justify-between items-center">
+      <div className="flex md:justify-between md:flex-row flex-col gap-3 md:items-center">
         <h1 className="text-3xl font-bold">User Profile</h1>
         <div className="space-x-2">
           <Button asChild variant="outline">
@@ -52,7 +52,7 @@ export default async function UserProfileSettingsPage() {
         <ConnectedAccounts />
       </Suspense>
 
-      <div className="flex justify-between items-center mt-8 mb-4">
+      <div className="flex justify-between items-center mt-8 mb-4 md:px-0 px-4">
         <h2 className="text-2xl font-bold">Recent Threads</h2>
         <Button variant="link">
           <Link href={"/profile/my-threads"}>View all</Link>

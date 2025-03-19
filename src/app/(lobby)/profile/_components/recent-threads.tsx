@@ -9,7 +9,7 @@ type Props = {
 const RecentThreads = async ({ name }: Props) => {
   const threads = await getRecentsThread(name);
   return (
-    <div className="flex flex-col gap-3">
+    <div className="flex flex-col gap-3 md:px-0 px-4">
       {threads.map((thread) => (
         <ThreadCard key={thread.id} thread={thread} />
       ))}
